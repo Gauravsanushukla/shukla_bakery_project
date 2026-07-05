@@ -1,0 +1,1629 @@
+<!DOCTYPE html>
+<html lang="en" id="htmlRoot">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Shukla Bakery Store</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;800&family=Inter:wght@300;400;500;600;700&family=Noto+Sans+Devanagari:wght@400;500;600&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --bg:       #fdf8f2; --bg2:      #fef3e2; --card:     #ffffff;
+    --hdr:      rgba(253,248,242,0.96); --ftr:  #2c1a0e;
+    --txt:      #1e0f05; --txt2:     #6b3f22; --acc:      #c8773a;
+    --acch:     #a85e28; --accl:     #fde8d0; --bdr:      #e8d5c0;
+    --shd:      rgba(200,119,58,0.18); --star: #f59e0b; --stari:#d1c4b0;
+    --inv:      #fef9f4; --rev:      #fdf5ec; --adm:      #fff8f0;
+  }
+  .dark {
+    --bg:#1a0f06; --bg2:#231508; --card:#2a1c10; --hdr:rgba(26,15,6,0.97);
+    --ftr:#0f0804; --txt:#f5e6d3; --txt2:#c9a882; --acc:#e8924a;
+    --acch:#d4783a; --accl:#3d2010; --bdr:#4a3020; --shd:rgba(232,146,74,0.22);
+    --star:#fbbf24; --stari:#4a3020; --inv:#1e1208; --rev:#1a1008; --adm:#2a1c10;
+  }
+  *{box-sizing:border-box;transition:background-color .3s,border-color .3s,color .3s}
+  body{background:var(--bg);color:var(--txt);font-family:'Inter',sans-serif}
+  .pf{font-family:'Playfair Display',serif}
+  .dv{font-family:'Noto Sans Devanagari',sans-serif}
+  /* scrollbar */
+  ::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:var(--bg)}
+  ::-webkit-scrollbar-thumb{background:var(--bdr);border-radius:3px}
+  ::-webkit-scrollbar-thumb:hover{background:var(--acc)}
+  /* header */
+  #hdr{background:var(--hdr);border-bottom:1px solid var(--bdr);backdrop-filter:blur(14px)}
+  .logo{color:var(--txt)}
+  .nav-a{color:var(--txt2);position:relative;transition:color .2s}
+  .nav-a:hover{color:var(--acc)}
+  .nav-a::after{content:'';position:absolute;bottom:-2px;left:0;width:0;height:2px;background:var(--acc);transition:width .3s}
+  .nav-a:hover::after{width:100%}
+  /* buttons */
+  .btn-p{background:linear-gradient(135deg,var(--acc),var(--acch));color:#fff;box-shadow:0 4px 14px var(--shd)}
+  .btn-p:hover{box-shadow:0 6px 20px var(--shd);transform:translateY(-1px)}
+  .btn-s{background:var(--accl);color:var(--acc);border:1.5px solid var(--acc)}
+  .btn-s:hover{background:var(--acc);color:#fff}
+  .btn-g{background:var(--card);color:var(--txt);border:1.5px solid var(--bdr)}
+  .btn-g:hover{border-color:var(--acc);color:var(--acc)}
+  /* inputs */
+  .inp{background:var(--bg);color:var(--txt);border:1.5px solid var(--bdr);outline:none}
+  .inp:focus{border-color:var(--acc);box-shadow:0 0 0 3px var(--accl)}
+  .inp::placeholder{color:var(--txt2);opacity:.6}
+  /* cards */
+  .card{background:var(--card);border:1px solid var(--bdr);box-shadow:0 2px 14px var(--shd)}
+  .card:hover{transform:translateY(-4px);box-shadow:0 10px 30px var(--shd)}
+  /* modal */
+  .modal-bg{background:rgba(0,0,0,.65);backdrop-filter:blur(8px)}
+  /* fomo banner */
+  #fomoBanner{background:linear-gradient(90deg,var(--acc),var(--acch),var(--acc));background-size:200% 100%;animation:shimmer 3s linear infinite}
+  @keyframes shimmer{0%{background-position:0% 0}100%{background-position:200% 0}}
+  /* hero */
+  .hero-bg{background:linear-gradient(150deg,var(--bg2) 0%,var(--bg) 60%)}
+  .hero-decor{background:radial-gradient(circle at 15% 50%,var(--accl) 0%,transparent 50%),radial-gradient(circle at 85% 20%,var(--accl) 0%,transparent 40%);opacity:.6}
+  /* cake builder */
+  .builder-bg{background:var(--bg2)}
+  .opt-btn{background:var(--accl);color:var(--acc);border:2px solid transparent;cursor:pointer;transition:all .2s}
+  .opt-btn:hover,.opt-btn.sel{background:var(--acc);color:#fff;border-color:var(--acch);transform:scale(1.05)}
+  .cake-preview{background:linear-gradient(135deg,var(--accl),var(--bg2));border:2px dashed var(--bdr)}
+  /* filter */
+  .fil-btn{background:var(--accl);color:var(--acc);border:1.5px solid transparent}
+  .fil-btn:hover,.fil-btn.on{background:var(--acc);color:#fff;box-shadow:0 4px 12px var(--shd)}
+  /* stepper */
+  .step-done{background:var(--acc);color:#fff}
+  .step-active{background:var(--acc);color:#fff;box-shadow:0 0 0 4px var(--accl),0 0 0 6px var(--acc)}
+  .step-wait{background:var(--bdr);color:var(--txt2)}
+  .step-line-done{background:var(--acc)}
+  .step-line-wait{background:var(--bdr)}
+  /* stars */
+  .star-i{color:var(--stari);cursor:pointer;transition:color .15s}
+  .star-i.on,.star-i:hover{color:var(--star)}
+  /* review card */
+  .rev-card{background:var(--card);border:1px solid var(--bdr);animation:slideUp .4s ease-out}
+  @keyframes slideUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+  /* gallery */
+  .gal-item{background:var(--card);border:1px solid var(--bdr);cursor:pointer;overflow:hidden;transition:transform .3s,box-shadow .3s}
+  .gal-item:hover{transform:scale(1.04);box-shadow:0 8px 28px var(--shd)}
+  /* badge */
+  .bdg{display:inline-block;padding:2px 10px;border-radius:999px;font-size:.68rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase}
+  .bdg-c{background:#fde8d0;color:#c8773a}.bdg-p{background:#fce7f3;color:#db2777}
+  .bdg-b{background:#fef9c3;color:#ca8a04}.bdg-k{background:#dcfce7;color:#16a34a}
+  .dark .bdg-c{background:#3d2010;color:#e8924a}.dark .bdg-p{background:#3d1030;color:#f472b6}
+  .dark .bdg-b{background:#3d3010;color:#fbbf24}.dark .bdg-k{background:#103d20;color:#4ade80}
+  /* gift widget */
+  .gift-bg{background:var(--bg2)}
+  /* toast */
+  #toast{background:linear-gradient(135deg,var(--acc),var(--acch));transition:opacity .3s,transform .3s}
+  /* admin panel */
+  .adm-panel{background:var(--adm);border:2px dashed var(--bdr)}
+  /* RBAC cockpit */
+  .cockpit-bg{background:linear-gradient(135deg,#1a0a00,#2d1200)}
+  .cockpit-card{background:rgba(255,255,255,.06);border:1px solid rgba(232,146,74,.25);backdrop-filter:blur(8px)}
+  .cockpit-card:hover{border-color:rgba(232,146,74,.6);box-shadow:0 0 20px rgba(232,146,74,.15)}
+  /* stock toggle */
+  .stk-toggle{position:relative;display:inline-flex;align-items:center;cursor:pointer}
+  .stk-track{width:3rem;height:1.5rem;border-radius:999px;transition:background .3s}
+  .stk-thumb{position:absolute;left:.2rem;width:1.1rem;height:1.1rem;border-radius:50%;background:#fff;transition:transform .3s;box-shadow:0 1px 4px rgba(0,0,0,.3)}
+  .stk-on .stk-track{background:#22c55e}
+  .stk-off .stk-track{background:#ef4444}
+  .stk-on .stk-thumb{transform:translateX(1.5rem)}
+  /* OOS overlay */
+  .oos-overlay{position:absolute;inset:0;background:rgba(239,68,68,.18);display:flex;align-items:center;justify-content:center;z-index:5;border-radius:1rem}
+  .oos-badge{background:#ef4444;color:#fff;font-weight:800;font-size:.7rem;letter-spacing:.08em;padding:.3rem .8rem;border-radius:999px;text-transform:uppercase}
+  /* test accounts hint */
+  .hint-box{background:linear-gradient(135deg,var(--accl),var(--bg2));border:1.5px solid var(--bdr)}
+  /* cockpit stat card */
+  .stat-card{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);border-radius:1rem;padding:1.25rem;text-align:center}
+  /* role badge */
+  .role-admin{background:linear-gradient(135deg,#f59e0b,#d97706);color:#fff;padding:.2rem .75rem;border-radius:999px;font-size:.7rem;font-weight:800;letter-spacing:.06em}
+  .role-customer{background:linear-gradient(135deg,#3b82f6,#2563eb);color:#fff;padding:.2rem .75rem;border-radius:999px;font-size:.7rem;font-weight:800;letter-spacing:.06em}
+  /* countdown digits */
+  .cd-box{background:rgba(0,0,0,.25);border-radius:.5rem;padding:.25rem .6rem;font-weight:800;font-size:1.4rem;font-family:'Playfair Display',serif;min-width:2.8rem;text-align:center}
+  /* progress bar */
+  .prog-bar{background:var(--bdr);border-radius:999px;overflow:hidden}
+  .prog-fill{background:linear-gradient(90deg,var(--acc),var(--acch));border-radius:999px;transition:width .6s ease}
+  /* contact */
+  .contact-bg{background:var(--bg2)}
+  .contact-card{background:var(--card);border:1px solid var(--bdr);box-shadow:0 2px 14px var(--shd)}
+  .info-row{display:flex;align-items:flex-start;gap:.875rem;padding:.875rem 0;border-bottom:1px solid var(--bdr)}
+  .info-row:last-child{border-bottom:none}
+  .info-icon{width:2.5rem;height:2.5rem;border-radius:.75rem;display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0;background:var(--accl)}
+  .social-btn{display:flex;align-items:center;gap:.5rem;padding:.6rem 1rem;border-radius:.75rem;font-size:.8rem;font-weight:700;transition:all .2s;border:1.5px solid var(--bdr);background:var(--card);color:var(--txt)}
+  .social-btn:hover{transform:translateY(-2px);box-shadow:0 4px 12px var(--shd);border-color:var(--acc);color:var(--acc)}
+  .whatsapp-btn{background:linear-gradient(135deg,#25d366,#128c7e);color:#fff;border:none;box-shadow:0 4px 14px rgba(37,211,102,.35)}
+  .whatsapp-btn:hover{box-shadow:0 6px 20px rgba(37,211,102,.5);transform:translateY(-2px);color:#fff}
+  .map-frame{background:linear-gradient(135deg,var(--accl),var(--bg2));border:2px solid var(--bdr);border-radius:1.25rem;overflow:hidden;position:relative}
+  .map-pin-anim{animation:bounce 1.5s infinite}
+  @keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+  .contact-form-success{background:linear-gradient(135deg,#dcfce7,#bbf7d0);border:1.5px solid #4ade80;color:#166534}
+</style>
+</head>
+<body class="min-h-screen">
+
+<!-- ══════════════════════════════════════════════════════════
+     AUTH MODAL
+══════════════════════════════════════════════════════════ -->
+<div id="authModal" class="modal-bg hidden fixed inset-0 z-50 flex items-center justify-center p-4">
+  <div class="card rounded-2xl w-full max-w-md p-8 relative" style="background:var(--card)">
+    <button onclick="closeAuth()" class="absolute top-4 right-4 text-xl opacity-50 hover:opacity-100">✕</button>
+    <div class="text-center mb-5">
+      <div class="text-5xl mb-2">🔐</div>
+      <h2 class="pf text-2xl font-bold" id="authTitle">Sign In</h2>
+      <p class="text-sm mt-1" style="color:var(--txt2)" id="authSub">Welcome back to Shukla Bakery</p>
+    </div>
+    <!-- Test Account Quick-Fill Hints -->
+    <div class="hint-box rounded-xl p-4 mb-5 space-y-2">
+      <p class="text-xs font-bold mb-2" style="color:var(--acc)">🧪 Test Accounts — Click to auto-fill:</p>
+      <button onclick="quickFill('customer@gmail.com','customer123')"
+        class="w-full text-left px-3 py-2 rounded-lg text-xs font-medium transition-all hover:scale-[1.02]"
+        style="background:rgba(59,130,246,.12);border:1px solid rgba(59,130,246,.3);color:var(--txt)">
+        <span class="role-customer mr-2">CUSTOMER</span>
+        customer@gmail.com · customer123
+      </button>
+      <button onclick="quickFill('owner@shuklabakery.com','owner123')"
+        class="w-full text-left px-3 py-2 rounded-lg text-xs font-medium transition-all hover:scale-[1.02]"
+        style="background:rgba(245,158,11,.12);border:1px solid rgba(245,158,11,.3);color:var(--txt)">
+        <span class="role-admin mr-2">OWNER</span>
+        owner@shuklabakery.com · owner123
+      </button>
+    </div>
+    <div class="space-y-4">
+      <input id="aEmail" type="email" placeholder="Email address" class="inp w-full px-4 py-3 rounded-xl text-sm"/>
+      <input id="aPass"  type="password" placeholder="Password" class="inp w-full px-4 py-3 rounded-xl text-sm"/>
+      <button onclick="doAuth()" class="btn-p w-full py-3 rounded-xl font-bold transition-all hover:scale-[1.02]" id="aBtn">Sign In</button>
+    </div>
+    <p id="aErr" class="hidden text-red-500 text-sm text-center mt-3 font-medium"></p>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     HEADER
+══════════════════════════════════════════════════════════ -->
+<header id="hdr" class="sticky top-0 z-40">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex items-center justify-between h-16 gap-4">
+      <!-- Logo -->
+      <div class="flex items-center gap-2 flex-shrink-0">
+        <span class="text-3xl">🧁</span>
+        <div>
+          <h1 class="pf font-bold text-lg leading-tight logo" id="bName">Shukla Bakery</h1>
+          <p class="text-xs leading-none" style="color:var(--txt2)" id="bTag">Baked with Love</p>
+        </div>
+      </div>
+      <!-- Nav -->
+      <nav class="hidden lg:flex items-center gap-5 text-sm font-medium">
+        <a href="#hero"    class="nav-a" data-en="Home"    data-hi="होम">Home</a>
+        <a href="#builder" class="nav-a" data-en="Builder" data-hi="बिल्डर">Builder</a>
+        <a href="#shop"    class="nav-a" data-en="Shop"    data-hi="दुकान">Shop</a>
+        <a href="#tracker" class="nav-a" data-en="Track"   data-hi="ट्रैक">Track</a>
+        <a href="#gift"    class="nav-a" data-en="Gifting" data-hi="गिफ्ट">Gifting</a>
+        <a href="#gallery" class="nav-a" data-en="Gallery" data-hi="गैलरी">Gallery</a>
+        <a href="#reviews" class="nav-a" data-en="Reviews" data-hi="समीक्षा">Reviews</a>
+        <a href="#cockpit" id="cockpitNavLink" class="nav-a hidden font-bold" style="color:var(--acc)" data-en="🔑 Cockpit" data-hi="🔑 कॉकपिट">🔑 Cockpit</a>
+        <a href="#contact" class="nav-a" data-en="Contact" data-hi="संपर्क">Contact</a>
+      </nav>
+      <!-- Controls -->
+      <div class="flex items-center gap-2">
+        <button onclick="toggleLang()" id="langBtn" class="btn-s px-3 py-1.5 rounded-lg text-xs font-bold transition-all">हिंदी</button>
+        <button onclick="toggleDark()" id="darkBtn" class="btn-g w-9 h-9 rounded-full flex items-center justify-center text-lg transition-all">🌙</button>
+        <div id="authArea">
+          <button onclick="openAuth()" class="btn-p px-4 py-2 rounded-xl text-sm font-semibold transition-all">
+            <span data-en="Sign In" data-hi="साइन इन">Sign In</span>
+          </button>
+        </div>
+        <button onclick="toggleMob()" class="lg:hidden btn-g w-9 h-9 rounded-full flex items-center justify-center">☰</button>
+      </div>
+    </div>
+    <!-- Mobile nav -->
+    <div id="mobNav" class="hidden lg:hidden pb-4 space-y-1 text-sm font-medium border-t pt-3" style="border-color:var(--bdr)">
+      <a href="#hero"    onclick="toggleMob()" class="block nav-a py-2" data-en="Home"    data-hi="होम">Home</a>
+      <a href="#builder" onclick="toggleMob()" class="block nav-a py-2" data-en="Builder" data-hi="बिल्डर">Builder</a>
+      <a href="#shop"    onclick="toggleMob()" class="block nav-a py-2" data-en="Shop"    data-hi="दुकान">Shop</a>
+      <a href="#tracker" onclick="toggleMob()" class="block nav-a py-2" data-en="Track"   data-hi="ट्रैक">Track</a>
+      <a href="#gift"    onclick="toggleMob()" class="block nav-a py-2" data-en="Gifting" data-hi="गिफ्ट">Gifting</a>
+      <a href="#gallery" onclick="toggleMob()" class="block nav-a py-2" data-en="Gallery" data-hi="गैलरी">Gallery</a>
+      <a href="#reviews" onclick="toggleMob()" class="block nav-a py-2" data-en="Reviews" data-hi="समीक्षा">Reviews</a>
+      <a href="#contact" onclick="toggleMob()" class="block nav-a py-2" data-en="Contact" data-hi="संपर्क">Contact</a>
+    </div>
+  </div>
+</header>
+
+<!-- ══════════════════════════════════════════════════════════
+     FOMO BANNER
+══════════════════════════════════════════════════════════ -->
+<div id="fomoBanner" class="text-white py-2.5 px-4 text-center text-sm font-semibold">
+  <div class="flex items-center justify-center gap-3 flex-wrap">
+    <span class="text-base">⚡</span>
+    <span id="fomoText" data-en="Lightning Deal ends in:" data-hi="लाइटनिंग डील समाप्त होती है:">Lightning Deal ends in:</span>
+    <div class="flex items-center gap-1.5">
+      <span class="cd-box" id="cdH">00</span>
+      <span class="font-bold text-lg">:</span>
+      <span class="cd-box" id="cdM">00</span>
+      <span class="font-bold text-lg">:</span>
+      <span class="cd-box" id="cdS">00</span>
+    </div>
+    <span id="fomoOffer" class="bg-white/20 px-3 py-0.5 rounded-full text-xs font-bold" data-en="20% OFF all Fresh Breads today!" data-hi="आज सभी ताज़ी ब्रेड पर 20% छूट!">20% OFF all Fresh Breads today!</span>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     HERO
+══════════════════════════════════════════════════════════ -->
+<section id="hero" class="hero-bg py-20 px-4 relative overflow-hidden">
+  <div class="hero-decor absolute inset-0 pointer-events-none"></div>
+  <div class="max-w-3xl mx-auto text-center relative z-10">
+    <p class="text-xs font-bold tracking-widest uppercase mb-3" style="color:var(--acc)" data-en="Est. 1998 · Kanpur, UP" data-hi="स्थापित 1998 · कानपुर, उ.प्र.">Est. 1998 · Kanpur, UP</p>
+    <h2 class="pf text-5xl md:text-6xl font-extrabold mb-4 leading-tight" id="heroH">Freshly Baked,<br/>Every Single Day</h2>
+    <p class="text-lg mb-8 max-w-xl mx-auto" style="color:var(--txt2)" id="heroP">Artisan breads, celebration cakes &amp; handcrafted pastries — made with generations of love.</p>
+    <div class="flex flex-wrap gap-4 justify-center">
+      <a href="#builder" class="btn-p px-8 py-3 rounded-xl font-bold text-base transition-all hover:scale-105 shadow-lg" data-en="Build Your Cake" data-hi="अपना केक बनाएं">Build Your Cake</a>
+      <a href="#shop"    class="btn-s px-8 py-3 rounded-xl font-bold text-base transition-all hover:scale-105" data-en="Shop Now" data-hi="अभी खरीदें">Shop Now</a>
+    </div>
+    <!-- Live stats -->
+    <div class="flex flex-wrap justify-center gap-6 mt-12">
+      <div class="text-center"><div class="pf text-3xl font-bold" style="color:var(--acc)">2,400+</div><div class="text-xs mt-1" style="color:var(--txt2)" data-en="Happy Customers" data-hi="खुश ग्राहक">Happy Customers</div></div>
+      <div class="text-center"><div class="pf text-3xl font-bold" style="color:var(--acc)">48</div><div class="text-xs mt-1" style="color:var(--txt2)" data-en="Items Baked Today" data-hi="आज बेक किए">Items Baked Today</div></div>
+      <div class="text-center"><div class="pf text-3xl font-bold" style="color:var(--acc)">4.9★</div><div class="text-xs mt-1" style="color:var(--txt2)" data-en="Average Rating" data-hi="औसत रेटिंग">Average Rating</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════
+     CAKE BUILDER
+══════════════════════════════════════════════════════════ -->
+<section id="builder" class="builder-bg py-16 px-4">
+  <div class="max-w-6xl mx-auto">
+    <div class="text-center mb-10">
+      <p class="text-xs font-bold tracking-widest uppercase mb-2" style="color:var(--acc)" data-en="Customize" data-hi="कस्टमाइज़">Customize</p>
+      <h2 class="pf text-4xl font-bold" data-en="Interactive Cake Builder" data-hi="इंटरएक्टिव केक बिल्डर">Interactive Cake Builder</h2>
+    </div>
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+      <!-- Options Panel -->
+      <div class="card rounded-2xl p-6 space-y-6">
+        <!-- Flavour -->
+        <div>
+          <p class="font-semibold mb-3 text-sm" style="color:var(--txt2)" data-en="🍫 Choose Flavour" data-hi="🍫 स्वाद चुनें">🍫 Choose Flavour</p>
+          <div class="flex flex-wrap gap-2" id="flavourOpts">
+            <button class="opt-btn px-4 py-2 rounded-xl text-sm font-semibold" onclick="pick('flavour','Chocolate',350,this)">🍫 Chocolate</button>
+            <button class="opt-btn px-4 py-2 rounded-xl text-sm font-semibold" onclick="pick('flavour','Vanilla',300,this)">🍦 Vanilla</button>
+            <button class="opt-btn px-4 py-2 rounded-xl text-sm font-semibold" onclick="pick('flavour','Red Velvet',400,this)">❤️ Red Velvet</button>
+            <button class="opt-btn px-4 py-2 rounded-xl text-sm font-semibold" onclick="pick('flavour','Mango',380,this)">🥭 Mango</button>
+            <button class="opt-btn px-4 py-2 rounded-xl text-sm font-semibold" onclick="pick('flavour','Strawberry',360,this)">🍓 Strawberry</button>
+            <button class="opt-btn px-4 py-2 rounded-xl text-sm font-semibold" onclick="pick('flavour','Butterscotch',320,this)">🧈 Butterscotch</button>
+          </div>
+        </div>
+        <!-- Tiers -->
+        <div>
+          <p class="font-semibold mb-3 text-sm" style="color:var(--txt2)" data-en="🎂 Number of Tiers" data-hi="🎂 परतों की संख्या">🎂 Number of Tiers</p>
+          <div class="flex flex-wrap gap-2" id="tierOpts">
+            <button class="opt-btn px-4 py-2 rounded-xl text-sm font-semibold" onclick="pick('tiers','1 Tier',0,this)">1 Tier</button>
+            <button class="opt-btn px-4 py-2 rounded-xl text-sm font-semibold" onclick="pick('tiers','2 Tiers',250,this)">2 Tiers +₹250</button>
+            <button class="opt-btn px-4 py-2 rounded-xl text-sm font-semibold" onclick="pick('tiers','3 Tiers',550,this)">3 Tiers +₹550</button>
+            <button class="opt-btn px-4 py-2 rounded-xl text-sm font-semibold" onclick="pick('tiers','4 Tiers',900,this)">4 Tiers +₹900</button>
+          </div>
+        </div>
+        <!-- Weight -->
+        <div>
+          <p class="font-semibold mb-3 text-sm" style="color:var(--txt2)" data-en="⚖️ Weight" data-hi="⚖️ वज़न">⚖️ Weight</p>
+          <div class="flex flex-wrap gap-2" id="weightOpts">
+            <button class="opt-btn px-4 py-2 rounded-xl text-sm font-semibold" onclick="pick('weight','0.5 kg',0,this)">0.5 kg</button>
+            <button class="opt-btn px-4 py-2 rounded-xl text-sm font-semibold" onclick="pick('weight','1 kg',200,this)">1 kg +₹200</button>
+            <button class="opt-btn px-4 py-2 rounded-xl text-sm font-semibold" onclick="pick('weight','1.5 kg',380,this)">1.5 kg +₹380</button>
+            <button class="opt-btn px-4 py-2 rounded-xl text-sm font-semibold" onclick="pick('weight','2 kg',550,this)">2 kg +₹550</button>
+            <button class="opt-btn px-4 py-2 rounded-xl text-sm font-semibold" onclick="pick('weight','3 kg',850,this)">3 kg +₹850</button>
+          </div>
+        </div>
+        <!-- Frosting -->
+        <div>
+          <p class="font-semibold mb-3 text-sm" style="color:var(--txt2)" data-en="🎨 Frosting Type" data-hi="🎨 फ्रॉस्टिंग">🎨 Frosting Type</p>
+          <div class="flex flex-wrap gap-2" id="frostOpts">
+            <button class="opt-btn px-4 py-2 rounded-xl text-sm font-semibold" onclick="pick('frost','Whipped Cream',0,this)">Whipped Cream</button>
+            <button class="opt-btn px-4 py-2 rounded-xl text-sm font-semibold" onclick="pick('frost','Fondant',150,this)">Fondant +₹150</button>
+            <button class="opt-btn px-4 py-2 rounded-xl text-sm font-semibold" onclick="pick('frost','Ganache',120,this)">Ganache +₹120</button>
+            <button class="opt-btn px-4 py-2 rounded-xl text-sm font-semibold" onclick="pick('frost','Buttercream',80,this)">Buttercream +₹80</button>
+          </div>
+        </div>
+        <!-- Message -->
+        <div>
+          <p class="font-semibold mb-2 text-sm" style="color:var(--txt2)" data-en="✍️ Text on Cake" data-hi="✍️ केक पर लिखें">✍️ Text on Cake</p>
+          <input id="cakeMsg" type="text" maxlength="40" placeholder="e.g. Happy Birthday Priya! 🎉"
+            class="inp w-full px-4 py-3 rounded-xl text-sm" oninput="updatePreview()"/>
+          <p class="text-xs mt-1" style="color:var(--txt2)"><span id="msgLen">0</span>/40 characters</p>
+        </div>
+      </div>
+      <!-- Preview Panel -->
+      <div class="space-y-4">
+        <div class="cake-preview rounded-2xl p-8 text-center min-h-[320px] flex flex-col items-center justify-center gap-4">
+          <div id="cakeEmoji" class="text-8xl transition-all duration-500">🎂</div>
+          <div id="cakeMsgDisplay" class="pf text-xl font-bold italic" style="color:var(--acc)"></div>
+          <div class="grid grid-cols-2 gap-3 w-full max-w-xs text-sm">
+            <div class="card rounded-xl p-3 text-center">
+              <div class="text-xs mb-1" style="color:var(--txt2)" data-en="Flavour" data-hi="स्वाद">Flavour</div>
+              <div class="font-semibold" id="pvFlavour">—</div>
+            </div>
+            <div class="card rounded-xl p-3 text-center">
+              <div class="text-xs mb-1" style="color:var(--txt2)" data-en="Tiers" data-hi="परतें">Tiers</div>
+              <div class="font-semibold" id="pvTiers">—</div>
+            </div>
+            <div class="card rounded-xl p-3 text-center">
+              <div class="text-xs mb-1" style="color:var(--txt2)" data-en="Weight" data-hi="वज़न">Weight</div>
+              <div class="font-semibold" id="pvWeight">—</div>
+            </div>
+            <div class="card rounded-xl p-3 text-center">
+              <div class="text-xs mb-1" style="color:var(--txt2)" data-en="Frosting" data-hi="फ्रॉस्टिंग">Frosting</div>
+              <div class="font-semibold" id="pvFrost">—</div>
+            </div>
+          </div>
+        </div>
+        <!-- Price Card -->
+        <div class="card rounded-2xl p-6">
+          <div class="flex items-center justify-between mb-4">
+            <span class="font-semibold" data-en="Live Price Estimate" data-hi="लाइव मूल्य अनुमान">Live Price Estimate</span>
+            <span class="text-xs px-2 py-1 rounded-full font-bold" style="background:var(--accl);color:var(--acc)" data-en="Real-time" data-hi="रियल-टाइम">Real-time</span>
+          </div>
+          <div id="priceBreakdown" class="space-y-2 text-sm mb-4" style="color:var(--txt2)">
+            <div class="flex justify-between"><span data-en="Base Price" data-hi="आधार मूल्य">Base Price</span><span id="pbBase">₹0</span></div>
+            <div class="flex justify-between"><span data-en="Tiers Add-on" data-hi="परत अतिरिक्त">Tiers Add-on</span><span id="pbTiers">₹0</span></div>
+            <div class="flex justify-between"><span data-en="Weight Add-on" data-hi="वज़न अतिरिक्त">Weight Add-on</span><span id="pbWeight">₹0</span></div>
+            <div class="flex justify-between"><span data-en="Frosting Add-on" data-hi="फ्रॉस्टिंग अतिरिक्त">Frosting Add-on</span><span id="pbFrost">₹0</span></div>
+            <div class="border-t pt-2 flex justify-between font-bold text-base" style="border-color:var(--bdr);color:var(--txt)">
+              <span data-en="Total" data-hi="कुल">Total</span>
+              <span id="pbTotal" class="pf text-2xl" style="color:var(--acc)">₹0</span>
+            </div>
+          </div>
+          <button onclick="addCakeToCart()" class="btn-p w-full py-3 rounded-xl font-bold transition-all hover:scale-[1.02]" data-en="🛒 Add Custom Cake to Cart" data-hi="🛒 कस्टम केक कार्ट में डालें">🛒 Add Custom Cake to Cart</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════
+     SHOP / INVENTORY
+══════════════════════════════════════════════════════════ -->
+<section id="shop" class="py-16 px-4" style="background:var(--inv)">
+  <div class="max-w-7xl mx-auto">
+    <div class="text-center mb-10">
+      <p class="text-xs font-bold tracking-widest uppercase mb-2" style="color:var(--acc)" data-en="Fresh Daily" data-hi="रोज़ ताज़ा">Fresh Daily</p>
+      <h2 class="pf text-4xl font-bold" data-en="Our Products" data-hi="हमारे उत्पाद">Our Products</h2>
+    </div>
+    <!-- Admin Add Form -->
+    <div id="adminForm" class="hidden adm-panel rounded-2xl p-6 mb-8">
+      <h3 class="pf text-xl font-bold mb-4 flex items-center gap-2" style="color:var(--acc)">
+        ➕ <span data-en="Add New Product" data-hi="नया उत्पाद जोड़ें">Add New Product</span>
+      </h3>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <input id="nName"  type="text"   placeholder="Product Name"   class="inp px-4 py-2.5 rounded-xl text-sm"/>
+        <input id="nPrice" type="number" placeholder="Price (₹)"      class="inp px-4 py-2.5 rounded-xl text-sm"/>
+        <select id="nCat"  class="inp px-4 py-2.5 rounded-xl text-sm">
+          <option value="cakes">Cakes</option>
+          <option value="pastries">Pastries</option>
+          <option value="breads">Breads</option>
+          <option value="cookies">Cookies</option>
+          <option value="biscuits">Biscuits</option>
+          <option value="namkeen">Namkeen</option>
+          <option value="snacks">Snacks</option>
+          <option value="colddrinks">Cold Drinks</option>
+          <option value="icecream">Ice Cream</option>
+        </select>
+        <input id="nEmoji" type="text"   placeholder="Emoji 🎂"        class="inp px-4 py-2.5 rounded-xl text-sm"/>
+        <input id="nDesc"  type="text"   placeholder="Short description" class="inp px-4 py-2.5 rounded-xl text-sm sm:col-span-2"/>
+      </div>
+      <button onclick="addProduct()" class="btn-p mt-4 px-6 py-2.5 rounded-xl font-bold text-sm transition-all hover:scale-105" data-en="Add Product" data-hi="उत्पाद जोड़ें">Add Product</button>
+    </div>
+    <!-- Filters -->
+    <div class="flex flex-wrap gap-3 mb-8 justify-center">
+      <button onclick="filterProd('all')"      class="fil-btn on px-5 py-2 rounded-full text-sm font-bold transition-all" data-en="All"      data-hi="सभी">All</button>
+      <button onclick="filterProd('cakes')"    class="fil-btn px-5 py-2 rounded-full text-sm font-bold transition-all" data-en="Cakes"    data-hi="केक">Cakes</button>
+      <button onclick="filterProd('pastries')" class="fil-btn px-5 py-2 rounded-full text-sm font-bold transition-all" data-en="Pastries" data-hi="पेस्ट्री">Pastries</button>
+      <button onclick="filterProd('breads')"   class="fil-btn px-5 py-2 rounded-full text-sm font-bold transition-all" data-en="Breads"   data-hi="ब्रेड">Breads</button>
+      <button onclick="filterProd('cookies')"  class="fil-btn px-5 py-2 rounded-full text-sm font-bold transition-all" data-en="Cookies"  data-hi="कुकीज़">Cookies</button>
+      <button onclick="filterProd('biscuits')" class="fil-btn px-5 py-2 rounded-full text-sm font-bold transition-all" data-en="Biscuits" data-hi="बिस्किट">Biscuits</button>
+      <button onclick="filterProd('namkeen')"  class="fil-btn px-5 py-2 rounded-full text-sm font-bold transition-all" data-en="Namkeen"  data-hi="नमकीन">Namkeen</button>
+      <button onclick="filterProd('snacks')"     class="fil-btn px-5 py-2 rounded-full text-sm font-bold transition-all" data-en="Snacks"     data-hi="स्नैक्स">Snacks</button>
+      <button onclick="filterProd('colddrinks')" class="fil-btn px-5 py-2 rounded-full text-sm font-bold transition-all" data-en="Cold Drinks" data-hi="कोल्ड ड्रिंक">Cold Drinks</button>
+      <button onclick="filterProd('icecream')"   class="fil-btn px-5 py-2 rounded-full text-sm font-bold transition-all" data-en="Ice Cream"   data-hi="आइसक्रीम">Ice Cream</button>
+    </div>
+    <!-- Grid -->
+    <div id="prodGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"></div>
+    <p id="prodEmpty" class="hidden text-center py-12 text-lg" style="color:var(--txt2)">No products in this category.</p>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════
+     ORDER TRACKER
+══════════════════════════════════════════════════════════ -->
+<section id="tracker" class="py-16 px-4">
+  <div class="max-w-4xl mx-auto">
+    <div class="text-center mb-10">
+      <p class="text-xs font-bold tracking-widest uppercase mb-2" style="color:var(--acc)" data-en="Live Status" data-hi="लाइव स्टेटस">Live Status</p>
+      <h2 class="pf text-4xl font-bold" data-en="Order Step Tracker" data-hi="ऑर्डर स्टेप ट्रैकर">Order Step Tracker</h2>
+      <p class="mt-2 text-sm" style="color:var(--txt2)" data-en="Track your order in real-time from our kitchen to your door." data-hi="हमारी रसोई से आपके दरवाज़े तक रियल-टाइम ट्रैकिंग।">Track your order in real-time from our kitchen to your door.</p>
+    </div>
+    <!-- Order ID input -->
+    <div class="card rounded-2xl p-6 mb-8">
+      <div class="flex flex-col sm:flex-row gap-3">
+        <input id="orderIdInput" type="text" placeholder="Enter Order ID (e.g. SB-2024-001)"
+          class="inp flex-1 px-4 py-3 rounded-xl text-sm"/>
+        <button onclick="trackOrder()" class="btn-p px-6 py-3 rounded-xl font-bold text-sm transition-all hover:scale-105" data-en="Track Order" data-hi="ऑर्डर ट्रैक करें">Track Order</button>
+        <button onclick="demoTrack()" class="btn-s px-6 py-3 rounded-xl font-bold text-sm transition-all hover:scale-105" data-en="Demo Track" data-hi="डेमो ट्रैक">Demo Track</button>
+      </div>
+    </div>
+    <!-- Stepper -->
+    <div id="stepperWrap" class="card rounded-2xl p-8">
+      <div id="stepperUI" class="relative">
+        <!-- Injected by JS -->
+      </div>
+      <!-- Progress bar -->
+      <div class="mt-8">
+        <div class="flex justify-between text-xs mb-2" style="color:var(--txt2)">
+          <span data-en="Order Progress" data-hi="ऑर्डर प्रगति">Order Progress</span>
+          <span id="stepPct">0%</span>
+        </div>
+        <div class="prog-bar h-3"><div id="stepProgFill" class="prog-fill h-3" style="width:0%"></div></div>
+      </div>
+      <div id="stepMsg" class="mt-4 text-center text-sm font-medium" style="color:var(--acc)"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════
+     GIFTING & SCHEDULER
+══════════════════════════════════════════════════════════ -->
+<section id="gift" class="py-16 px-4 gift-bg">
+  <div class="max-w-4xl mx-auto">
+    <div class="text-center mb-10">
+      <p class="text-xs font-bold tracking-widest uppercase mb-2" style="color:var(--acc)" data-en="Special Delivery" data-hi="विशेष डिलीवरी">Special Delivery</p>
+      <h2 class="pf text-4xl font-bold" data-en="Gifting & Scheduler" data-hi="गिफ्टिंग और शेड्यूलर">Gifting &amp; Scheduler</h2>
+    </div>
+    <div class="card rounded-2xl p-8 space-y-6">
+      <!-- Gift toggle -->
+      <div class="flex items-center justify-between p-4 rounded-xl" style="background:var(--accl)">
+        <div>
+          <p class="font-bold" data-en="🎁 Mark as Gift" data-hi="🎁 गिफ्ट के रूप में चिह्नित करें">🎁 Mark as Gift</p>
+          <p class="text-xs mt-0.5" style="color:var(--txt2)" data-en="Add a personal touch with a digital card" data-hi="डिजिटल कार्ड के साथ व्यक्तिगत स्पर्श जोड़ें">Add a personal touch with a digital card</p>
+        </div>
+        <label class="relative inline-flex items-center cursor-pointer">
+          <input type="checkbox" id="giftToggle" class="sr-only peer" onchange="toggleGift()"/>
+          <div class="w-12 h-6 rounded-full peer-checked:bg-[var(--acc)] transition-all" style="background:var(--bdr)"></div>
+          <div class="absolute left-1 top-1 w-4 h-4 rounded-full bg-white transition-all peer-checked:translate-x-6 shadow"></div>
+        </label>
+      </div>
+      <!-- Gift card message -->
+      <div id="giftCardWrap" class="hidden space-y-4">
+        <div>
+          <label class="block text-sm font-semibold mb-2" data-en="💌 Digital Card Message" data-hi="💌 डिजिटल कार्ड संदेश">💌 Digital Card Message</label>
+          <textarea id="giftMsg" rows="3" placeholder="Write your heartfelt message here..."
+            class="inp w-full px-4 py-3 rounded-xl text-sm resize-none"></textarea>
+        </div>
+        <div>
+          <label class="block text-sm font-semibold mb-2" data-en="👤 Recipient Name" data-hi="👤 प्राप्तकर्ता का नाम">👤 Recipient Name</label>
+          <input id="giftRecipient" type="text" placeholder="e.g. Priya Sharma"
+            class="inp w-full px-4 py-3 rounded-xl text-sm"/>
+        </div>
+        <!-- Card preview -->
+        <div id="giftPreview" class="rounded-xl p-5 text-center" style="background:linear-gradient(135deg,var(--accl),var(--bg2));border:2px solid var(--bdr)">
+          <div class="text-3xl mb-2">💝</div>
+          <p class="pf text-lg font-bold" id="gpTo" style="color:var(--acc)">To: —</p>
+          <p class="text-sm mt-2 italic" id="gpMsg" style="color:var(--txt2)">Your message will appear here...</p>
+          <p class="text-xs mt-3" style="color:var(--txt2)">— From Shukla Bakery with Love 🧁</p>
+        </div>
+      </div>
+      <!-- Delivery options -->
+      <div>
+        <p class="font-bold mb-3" data-en="🚚 Delivery Schedule" data-hi="🚚 डिलीवरी शेड्यूल">🚚 Delivery Schedule</p>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          <label class="delivery-opt cursor-pointer">
+            <input type="radio" name="delivery" value="standard" class="sr-only peer" checked/>
+            <div class="card rounded-xl p-4 text-center peer-checked:border-[var(--acc)] peer-checked:bg-[var(--accl)] transition-all border-2">
+              <div class="text-2xl mb-1">🏪</div>
+              <div class="font-bold text-sm" data-en="Store Pickup" data-hi="स्टोर पिकअप">Store Pickup</div>
+              <div class="text-xs mt-1" style="color:var(--txt2)" data-en="Ready in 2 hrs" data-hi="2 घंटे में तैयार">Ready in 2 hrs</div>
+            </div>
+          </label>
+          <label class="delivery-opt cursor-pointer">
+            <input type="radio" name="delivery" value="same-day" class="sr-only peer"/>
+            <div class="card rounded-xl p-4 text-center peer-checked:border-[var(--acc)] peer-checked:bg-[var(--accl)] transition-all border-2">
+              <div class="text-2xl mb-1">⚡</div>
+              <div class="font-bold text-sm" data-en="Same Day" data-hi="उसी दिन">Same Day</div>
+              <div class="text-xs mt-1" style="color:var(--txt2)" data-en="Delivery by 8 PM" data-hi="शाम 8 बजे तक">Delivery by 8 PM</div>
+            </div>
+          </label>
+          <label class="delivery-opt cursor-pointer">
+            <input type="radio" name="delivery" value="midnight" class="sr-only peer"/>
+            <div class="card rounded-xl p-4 text-center peer-checked:border-[var(--acc)] peer-checked:bg-[var(--accl)] transition-all border-2">
+              <div class="text-2xl mb-1">🌙</div>
+              <div class="font-bold text-sm" data-en="Midnight Delivery" data-hi="मिडनाइट डिलीवरी">Midnight Delivery</div>
+              <div class="text-xs mt-1" style="color:var(--txt2)" data-en="12 AM Surprise!" data-hi="रात 12 बजे सरप्राइज़!">12 AM Surprise!</div>
+            </div>
+          </label>
+        </div>
+      </div>
+      <!-- Date picker -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div>
+          <label class="block text-sm font-semibold mb-2" data-en="📅 Delivery Date" data-hi="📅 डिलीवरी तारीख">📅 Delivery Date</label>
+          <input id="delivDate" type="date" class="inp w-full px-4 py-3 rounded-xl text-sm"/>
+        </div>
+        <div>
+          <label class="block text-sm font-semibold mb-2" data-en="🕐 Preferred Time" data-hi="🕐 पसंदीदा समय">🕐 Preferred Time</label>
+          <select id="delivTime" class="inp w-full px-4 py-3 rounded-xl text-sm">
+            <option>9:00 AM – 11:00 AM</option>
+            <option>11:00 AM – 1:00 PM</option>
+            <option>2:00 PM – 4:00 PM</option>
+            <option>5:00 PM – 7:00 PM</option>
+            <option>7:00 PM – 9:00 PM</option>
+            <option>12:00 AM (Midnight)</option>
+          </select>
+        </div>
+      </div>
+      <button onclick="scheduleOrder()" class="btn-p w-full py-3 rounded-xl font-bold transition-all hover:scale-[1.02]" data-en="✅ Confirm &amp; Schedule Order" data-hi="✅ ऑर्डर कन्फर्म करें">✅ Confirm &amp; Schedule Order</button>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════
+     GALLERY
+══════════════════════════════════════════════════════════ -->
+<section id="gallery" class="py-16 px-4">
+  <div class="max-w-7xl mx-auto">
+    <div class="text-center mb-10">
+      <p class="text-xs font-bold tracking-widest uppercase mb-2" style="color:var(--acc)" data-en="Our Creations" data-hi="हमारी कृतियां">Our Creations</p>
+      <h2 class="pf text-4xl font-bold" data-en="Customer Gallery" data-hi="कस्टमर गैलरी">Customer Gallery</h2>
+    </div>
+    <div id="galGrid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"></div>
+  </div>
+</section>
+
+<!-- Lightbox -->
+<div id="lbox" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4" style="background:rgba(0,0,0,.85);backdrop-filter:blur(8px)" onclick="closeLbox()">
+  <div class="text-center max-w-sm w-full">
+    <div id="lboxEmoji" class="text-9xl mb-4"></div>
+    <p id="lboxCap" class="text-white text-lg font-semibold"></p>
+    <p class="text-white/50 text-sm mt-1" data-en="Click anywhere to close" data-hi="बंद करने के लिए कहीं भी क्लिक करें">Click anywhere to close</p>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     REVIEWS
+══════════════════════════════════════════════════════════ -->
+<section id="reviews" class="py-16 px-4" style="background:var(--rev)">
+  <div class="max-w-7xl mx-auto">
+    <div class="text-center mb-10">
+      <p class="text-xs font-bold tracking-widest uppercase mb-2" style="color:var(--acc)" data-en="What People Say" data-hi="लोग क्या कहते हैं">What People Say</p>
+      <h2 class="pf text-4xl font-bold" data-en="Reviews & Ratings" data-hi="समीक्षाएं और रेटिंग">Reviews &amp; Ratings</h2>
+    </div>
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <!-- Form -->
+      <div class="lg:col-span-1">
+        <div class="card rounded-2xl p-6 sticky top-20">
+          <h3 class="pf text-xl font-bold mb-5" data-en="Share Your Experience" data-hi="अपना अनुभव साझा करें">Share Your Experience</h3>
+          <div class="space-y-4">
+            <input id="rName" type="text" placeholder="Your Name" class="inp w-full px-4 py-3 rounded-xl text-sm"/>
+            <div>
+              <p class="text-sm font-semibold mb-2" style="color:var(--txt2)" data-en="Your Rating" data-hi="आपकी रेटिंग">Your Rating</p>
+              <div id="starSel" class="flex gap-1 text-3xl">
+                <span class="star-i" data-v="1" onclick="setRating(1)">★</span>
+                <span class="star-i" data-v="2" onclick="setRating(2)">★</span>
+                <span class="star-i" data-v="3" onclick="setRating(3)">★</span>
+                <span class="star-i" data-v="4" onclick="setRating(4)">★</span>
+                <span class="star-i" data-v="5" onclick="setRating(5)">★</span>
+              </div>
+            </div>
+            <textarea id="rContent" rows="4" placeholder="Tell us about your experience..."
+              class="inp w-full px-4 py-3 rounded-xl text-sm resize-none"></textarea>
+            <button onclick="submitReview()" class="btn-p w-full py-3 rounded-xl font-bold transition-all hover:scale-[1.02]" data-en="Submit Review" data-hi="समीक्षा सबमिट करें">Submit Review</button>
+          </div>
+          <p id="rSuccess" class="hidden text-green-500 text-sm text-center mt-3 font-medium"></p>
+          <!-- Rating summary -->
+          <div id="ratSum" class="mt-6 pt-6" style="border-top:1px solid var(--bdr)">
+            <div class="flex items-center gap-4 mb-4">
+              <div class="text-center">
+                <div id="avgNum" class="pf text-4xl font-bold" style="color:var(--acc)">4.9</div>
+                <div id="avgStars" class="text-yellow-400 text-sm mt-0.5">★★★★★</div>
+                <div id="totalRev" class="text-xs mt-1" style="color:var(--txt2)">3 reviews</div>
+              </div>
+              <div class="flex-1 space-y-1.5" id="ratBars"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Feed -->
+      <div class="lg:col-span-2">
+        <div id="revFeed" class="space-y-4"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════
+     OWNER MANAGEMENT COCKPIT (Admin Only — rendered by JS)
+══════════════════════════════════════════════════════════ -->
+<section id="cockpit" class="hidden py-16 px-4 cockpit-bg">
+  <div class="max-w-7xl mx-auto">
+    <!-- Header -->
+    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-10">
+      <div>
+        <div class="flex items-center gap-3 mb-1">
+          <span class="text-3xl">🏪</span>
+          <h2 class="pf text-4xl font-bold text-white">Management Cockpit</h2>
+          <span class="role-admin">OWNER</span>
+        </div>
+        <p class="text-sm" style="color:rgba(255,255,255,.5)" data-en="Full inventory control & analytics dashboard" data-hi="पूर्ण इन्वेंटरी नियंत्रण और एनालिटिक्स">Full inventory control &amp; analytics dashboard</p>
+      </div>
+      <div class="text-xs px-3 py-1.5 rounded-full font-bold" style="background:rgba(34,197,94,.15);color:#4ade80;border:1px solid rgba(34,197,94,.3)">
+        🟢 Live Session Active
+      </div>
+    </div>
+
+    <!-- Stats Row -->
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10" id="cockpitStats"></div>
+
+    <!-- Cockpit Inventory Grid -->
+    <div class="cockpit-card rounded-2xl p-6">
+      <div class="flex items-center justify-between mb-6">
+        <h3 class="pf text-xl font-bold text-white flex items-center gap-2">
+          📦 <span data-en="Live Inventory Matrix" data-hi="लाइव इन्वेंटरी मैट्रिक्स">Live Inventory Matrix</span>
+        </h3>
+        <span class="text-xs" style="color:rgba(255,255,255,.4)" data-en="Toggle stock status in real-time" data-hi="रियल-टाइम में स्टॉक स्टेटस बदलें">Toggle stock status in real-time</span>
+      </div>
+      <div id="cockpitGrid" class="space-y-3"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════
+     CONTACT PAGE
+══════════════════════════════════════════════════════════ -->
+<section id="contact" class="py-16 px-4 contact-bg">
+  <div class="max-w-7xl mx-auto">
+
+    <!-- Section Header -->
+    <div class="text-center mb-12">
+      <p class="text-xs font-bold tracking-widest uppercase mb-2" style="color:var(--acc)" data-en="Get In Touch" data-hi="संपर्क करें">Get In Touch</p>
+      <h2 class="pf text-4xl font-bold" data-en="Contact Us" data-hi="हमसे संपर्क करें">Contact Us</h2>
+      <p class="mt-3 text-sm max-w-xl mx-auto" style="color:var(--txt2)" data-en="Have a custom order, bulk inquiry, or just want to say hello? We'd love to hear from you." data-hi="कस्टम ऑर्डर, बल्क इन्क्वायरी, या बस हैलो कहना चाहते हैं? हमें आपसे सुनकर खुशी होगी।">Have a custom order, bulk inquiry, or just want to say hello? We'd love to hear from you.</p>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+
+      <!-- LEFT — Contact Info + Map -->
+      <div class="lg:col-span-1 space-y-6">
+
+        <!-- Info Card -->
+        <div class="contact-card rounded-2xl p-6">
+          <h3 class="pf text-lg font-bold mb-4" data-en="Store Information" data-hi="स्टोर जानकारी">Store Information</h3>
+
+          <div class="info-row">
+            <div class="info-icon">📍</div>
+            <div>
+              <p class="font-semibold text-sm" data-en="Address" data-hi="पता">Address</p>
+              <p class="text-xs mt-0.5 leading-relaxed" style="color:var(--txt2)" data-en="12, Civil Lines, Near Collectorate, Kanpur, Uttar Pradesh — 208001" data-hi="12, सिविल लाइंस, कलेक्ट्रेट के पास, कानपुर, उत्तर प्रदेश — 208001">12, Civil Lines, Near Collectorate,<br/>Kanpur, Uttar Pradesh — 208001</p>
+            </div>
+          </div>
+
+          <div class="info-row">
+            <div class="info-icon">📞</div>
+            <div>
+              <p class="font-semibold text-sm" data-en="Phone" data-hi="फ़ोन">Phone</p>
+              <a href="tel:+919876543210" class="text-xs mt-0.5 block hover:underline transition" style="color:var(--acc)">+91 98765 43210</a>
+              <a href="tel:+915122345678" class="text-xs mt-0.5 block hover:underline transition" style="color:var(--acc)">+91 512 234 5678</a>
+            </div>
+          </div>
+
+          <div class="info-row">
+            <div class="info-icon">✉️</div>
+            <div>
+              <p class="font-semibold text-sm" data-en="Email" data-hi="ईमेल">Email</p>
+              <a href="mailto:hello@shukla-bakery.in" class="text-xs mt-0.5 block hover:underline transition" style="color:var(--acc)">hello@shukla-bakery.in</a>
+              <a href="mailto:orders@shukla-bakery.in" class="text-xs mt-0.5 block hover:underline transition" style="color:var(--acc)">orders@shukla-bakery.in</a>
+            </div>
+          </div>
+
+          <div class="info-row">
+            <div class="info-icon">⏰</div>
+            <div>
+              <p class="font-semibold text-sm" data-en="Opening Hours" data-hi="खुलने का समय">Opening Hours</p>
+              <p class="text-xs mt-0.5" style="color:var(--txt2)" data-en="Mon – Sun: 7:00 AM – 9:00 PM" data-hi="सोम – रवि: सुबह 7:00 – रात 9:00">Mon – Sun: 7:00 AM – 9:00 PM</p>
+              <p class="text-xs mt-0.5 font-semibold" style="color:var(--acc)" data-en="🎂 Custom orders: 24/7 via WhatsApp" data-hi="🎂 कस्टम ऑर्डर: WhatsApp पर 24/7">🎂 Custom orders: 24/7 via WhatsApp</p>
+            </div>
+          </div>
+
+          <div class="info-row">
+            <div class="info-icon">🚚</div>
+            <div>
+              <p class="font-semibold text-sm" data-en="Delivery Zones" data-hi="डिलीवरी क्षेत्र">Delivery Zones</p>
+              <p class="text-xs mt-0.5 leading-relaxed" style="color:var(--txt2)" data-en="Civil Lines · Swaroop Nagar · Kidwai Nagar · Govind Nagar · Kakadeo · Armapur" data-hi="सिविल लाइंस · स्वरूप नगर · किदवई नगर · गोविंद नगर · काकादेव · अर्मापुर">Civil Lines · Swaroop Nagar · Kidwai Nagar<br/>Govind Nagar · Kakadeo · Armapur</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- WhatsApp CTA -->
+        <a href="https://wa.me/919876543210?text=Hello%20Shukla%20Bakery!%20I%20want%20to%20place%20an%20order." target="_blank"
+          class="whatsapp-btn social-btn w-full justify-center py-3 rounded-xl text-sm font-bold transition-all hover:scale-[1.02]">
+          <span class="text-xl">💬</span>
+          <span data-en="Chat on WhatsApp" data-hi="WhatsApp पर चैट करें">Chat on WhatsApp</span>
+        </a>
+
+        <!-- Social Links -->
+        <div class="contact-card rounded-2xl p-5">
+          <p class="font-bold text-sm mb-4" data-en="Follow Us" data-hi="हमें फॉलो करें">Follow Us</p>
+          <div class="grid grid-cols-2 gap-3">
+            <a href="#" class="social-btn rounded-xl justify-center py-2.5">
+              <span>📘</span><span>Facebook</span>
+            </a>
+            <a href="#" class="social-btn rounded-xl justify-center py-2.5">
+              <span>📸</span><span>Instagram</span>
+            </a>
+            <a href="#" class="social-btn rounded-xl justify-center py-2.5">
+              <span>▶️</span><span>YouTube</span>
+            </a>
+            <a href="#" class="social-btn rounded-xl justify-center py-2.5">
+              <span>🐦</span><span>Twitter/X</span>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT — Contact Form + Map -->
+      <div class="lg:col-span-2 space-y-6">
+
+        <!-- Contact Form -->
+        <div class="contact-card rounded-2xl p-8">
+          <h3 class="pf text-xl font-bold mb-6" data-en="Send Us a Message" data-hi="हमें संदेश भेजें">Send Us a Message</h3>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+            <div>
+              <label class="block text-xs font-semibold mb-1.5" style="color:var(--txt2)" data-en="Your Name *" data-hi="आपका नाम *">Your Name *</label>
+              <input id="ctName" type="text" placeholder="Rahul Sharma"
+                class="inp w-full px-4 py-3 rounded-xl text-sm"/>
+            </div>
+            <div>
+              <label class="block text-xs font-semibold mb-1.5" style="color:var(--txt2)" data-en="Phone Number *" data-hi="फ़ोन नंबर *">Phone Number *</label>
+              <input id="ctPhone" type="tel" placeholder="+91 98765 43210"
+                class="inp w-full px-4 py-3 rounded-xl text-sm"/>
+            </div>
+            <div>
+              <label class="block text-xs font-semibold mb-1.5" style="color:var(--txt2)" data-en="Email Address" data-hi="ईमेल पता">Email Address</label>
+              <input id="ctEmail" type="email" placeholder="rahul@gmail.com"
+                class="inp w-full px-4 py-3 rounded-xl text-sm"/>
+            </div>
+            <div>
+              <label class="block text-xs font-semibold mb-1.5" style="color:var(--txt2)" data-en="Inquiry Type" data-hi="इन्क्वायरी का प्रकार">Inquiry Type</label>
+              <select id="ctType" class="inp w-full px-4 py-3 rounded-xl text-sm">
+                <option data-en="Custom Cake Order"    data-hi="कस्टम केक ऑर्डर">Custom Cake Order</option>
+                <option data-en="Bulk / Corporate Order" data-hi="बल्क / कॉर्पोरेट ऑर्डर">Bulk / Corporate Order</option>
+                <option data-en="Wedding Order"        data-hi="वेडिंग ऑर्डर">Wedding Order</option>
+                <option data-en="Franchise Inquiry"    data-hi="फ्रेंचाइज़ इन्क्वायरी">Franchise Inquiry</option>
+                <option data-en="Feedback / Complaint" data-hi="फीडबैक / शिकायत">Feedback / Complaint</option>
+                <option data-en="General Inquiry"      data-hi="सामान्य इन्क्वायरी">General Inquiry</option>
+              </select>
+            </div>
+          </div>
+          <div class="mb-4">
+            <label class="block text-xs font-semibold mb-1.5" style="color:var(--txt2)" data-en="Your Message *" data-hi="आपका संदेश *">Your Message *</label>
+            <textarea id="ctMsg" rows="5" placeholder="Tell us about your order or inquiry..."
+              class="inp w-full px-4 py-3 rounded-xl text-sm resize-none"></textarea>
+          </div>
+          <!-- Preferred contact -->
+          <div class="mb-5">
+            <p class="text-xs font-semibold mb-2" style="color:var(--txt2)" data-en="Preferred Contact Method" data-hi="पसंदीदा संपर्क माध्यम">Preferred Contact Method</p>
+            <div class="flex flex-wrap gap-3">
+              <label class="flex items-center gap-2 cursor-pointer text-sm">
+                <input type="radio" name="ctPref" value="whatsapp" checked class="accent-[var(--acc)]"/>
+                <span>💬 WhatsApp</span>
+              </label>
+              <label class="flex items-center gap-2 cursor-pointer text-sm">
+                <input type="radio" name="ctPref" value="call" class="accent-[var(--acc)]"/>
+                <span>📞 <span data-en="Phone Call" data-hi="फ़ोन कॉल">Phone Call</span></span>
+              </label>
+              <label class="flex items-center gap-2 cursor-pointer text-sm">
+                <input type="radio" name="ctPref" value="email" class="accent-[var(--acc)]"/>
+                <span>✉️ Email</span>
+              </label>
+            </div>
+          </div>
+          <button onclick="submitContact()" class="btn-p w-full py-3.5 rounded-xl font-bold text-base transition-all hover:scale-[1.02]" data-en="📨 Send Message" data-hi="📨 संदेश भेजें">📨 Send Message</button>
+          <div id="ctSuccess" class="hidden contact-form-success rounded-xl p-4 mt-4 text-sm font-semibold text-center"></div>
+        </div>
+
+        <!-- Map Embed (Simulated) -->
+        <div class="contact-card rounded-2xl overflow-hidden">
+          <div class="map-frame min-h-[280px] flex flex-col items-center justify-center gap-4 p-8 text-center">
+            <div class="map-pin-anim text-5xl">📍</div>
+            <div>
+              <p class="pf text-xl font-bold" data-en="Shukla Bakery Store" data-hi="शुक्ला बेकरी स्टोर">Shukla Bakery Store</p>
+              <p class="text-sm mt-1" style="color:var(--txt2)" data-en="12, Civil Lines, Kanpur — 208001" data-hi="12, सिविल लाइंस, कानपुर — 208001">12, Civil Lines, Kanpur — 208001</p>
+            </div>
+            <div class="flex flex-wrap gap-3 justify-center mt-2">
+              <a href="https://maps.google.com/?q=Civil+Lines+Kanpur" target="_blank"
+                class="btn-p px-5 py-2.5 rounded-xl text-sm font-bold transition-all hover:scale-105">
+                🗺️ <span data-en="Open in Google Maps" data-hi="Google Maps में खोलें">Open in Google Maps</span>
+              </a>
+              <a href="https://maps.google.com/?q=Civil+Lines+Kanpur" target="_blank"
+                class="btn-s px-5 py-2.5 rounded-xl text-sm font-bold transition-all hover:scale-105">
+                🧭 <span data-en="Get Directions" data-hi="दिशा-निर्देश पाएं">Get Directions</span>
+              </a>
+            </div>
+            <!-- Nearby landmarks -->
+            <div class="flex flex-wrap gap-2 justify-center mt-2">
+              <span class="text-xs px-3 py-1 rounded-full font-medium" style="background:var(--accl);color:var(--acc)" data-en="Near Collectorate" data-hi="कलेक्ट्रेट के पास">Near Collectorate</span>
+              <span class="text-xs px-3 py-1 rounded-full font-medium" style="background:var(--accl);color:var(--acc)" data-en="Opp. GPO Kanpur" data-hi="GPO कानपुर के सामने">Opp. GPO Kanpur</span>
+              <span class="text-xs px-3 py-1 rounded-full font-medium" style="background:var(--accl);color:var(--acc)" data-en="5 min from Mall Road" data-hi="मॉल रोड से 5 मिनट">5 min from Mall Road</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick Stats / Trust Signals -->
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+          <div class="contact-card rounded-2xl p-4 text-center">
+            <div class="text-2xl mb-1">⚡</div>
+            <div class="pf font-bold text-lg" style="color:var(--acc)" data-en="2 hrs" data-hi="2 घंटे">2 hrs</div>
+            <div class="text-xs mt-0.5" style="color:var(--txt2)" data-en="Response Time" data-hi="जवाब का समय">Response Time</div>
+          </div>
+          <div class="contact-card rounded-2xl p-4 text-center">
+            <div class="text-2xl mb-1">🎂</div>
+            <div class="pf font-bold text-lg" style="color:var(--acc)" data-en="500+" data-hi="500+">500+</div>
+            <div class="text-xs mt-0.5" style="color:var(--txt2)" data-en="Custom Cakes/yr" data-hi="कस्टम केक/वर्ष">Custom Cakes/yr</div>
+          </div>
+          <div class="contact-card rounded-2xl p-4 text-center">
+            <div class="text-2xl mb-1">🏢</div>
+            <div class="pf font-bold text-lg" style="color:var(--acc)" data-en="50+" data-hi="50+">50+</div>
+            <div class="text-xs mt-0.5" style="color:var(--txt2)" data-en="Corporate Clients" data-hi="कॉर्पोरेट क्लाइंट">Corporate Clients</div>
+          </div>
+          <div class="contact-card rounded-2xl p-4 text-center">
+            <div class="text-2xl mb-1">🌟</div>
+            <div class="pf font-bold text-lg" style="color:var(--acc)" data-en="26 yrs" data-hi="26 साल">26 yrs</div>
+            <div class="text-xs mt-0.5" style="color:var(--txt2)" data-en="In Business" data-hi="व्यापार में">In Business</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════
+     FOOTER
+══════════════════════════════════════════════════════════ -->
+<footer style="background:var(--ftr);color:#f5e6d3" class="py-12 px-4">
+  <div class="max-w-7xl mx-auto">
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+      <div class="md:col-span-2">
+        <div class="flex items-center gap-2 mb-3"><span class="text-2xl">🧁</span><span class="pf font-bold text-xl">Shukla Bakery</span></div>
+        <p class="text-sm opacity-60 leading-relaxed max-w-xs" data-en="Serving freshness since 1998. Every bite tells a story of tradition, passion, and love." data-hi="1998 से ताज़गी परोस रहे हैं। हर निवाला परंपरा, जुनून और प्यार की कहानी कहता है।">Serving freshness since 1998. Every bite tells a story of tradition, passion, and love.</p>
+        <div class="flex gap-3 mt-4">
+          <span class="w-8 h-8 rounded-full flex items-center justify-center text-sm cursor-pointer hover:opacity-80 transition" style="background:rgba(255,255,255,.1)">📘</span>
+          <span class="w-8 h-8 rounded-full flex items-center justify-center text-sm cursor-pointer hover:opacity-80 transition" style="background:rgba(255,255,255,.1)">📸</span>
+          <span class="w-8 h-8 rounded-full flex items-center justify-center text-sm cursor-pointer hover:opacity-80 transition" style="background:rgba(255,255,255,.1)">🐦</span>
+        </div>
+      </div>
+      <div>
+        <h4 class="font-bold mb-3 opacity-80" data-en="Quick Links" data-hi="त्वरित लिंक">Quick Links</h4>
+        <ul class="space-y-2 text-sm opacity-60">
+          <li><a href="#builder" class="hover:opacity-100 transition" data-en="Cake Builder" data-hi="केक बिल्डर">Cake Builder</a></li>
+          <li><a href="#shop"    class="hover:opacity-100 transition" data-en="Shop"         data-hi="दुकान">Shop</a></li>
+          <li><a href="#tracker" class="hover:opacity-100 transition" data-en="Track Order"  data-hi="ऑर्डर ट्रैक">Track Order</a></li>
+          <li><a href="#gift"    class="hover:opacity-100 transition" data-en="Gifting"      data-hi="गिफ्टिंग">Gifting</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="font-bold mb-3 opacity-80" data-en="Contact" data-hi="संपर्क">Contact</h4>
+        <ul class="space-y-2 text-sm opacity-60">
+          <li><a href="https://maps.google.com/?q=Civil+Lines+Kanpur" target="_blank" class="hover:opacity-100 transition">📍 12, Civil Lines, Kanpur</a></li>
+          <li><a href="tel:+919876543210" class="hover:opacity-100 transition">📞 +91 98765 43210</a></li>
+          <li><a href="mailto:hello@shukla-bakery.in" class="hover:opacity-100 transition">✉️ hello@shukla-bakery.in</a></li>
+          <li>⏰ Mon–Sun: 7 AM – 9 PM</li>
+          <li><a href="https://wa.me/919876543210" target="_blank" class="hover:opacity-100 transition" style="color:#4ade80">💬 WhatsApp Order</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="text-center text-xs opacity-40 pt-6" style="border-top:1px solid rgba(255,255,255,.1)">
+      © 2024 Shukla Bakery Store · Crafted with ❤️ in Kanpur · AWS-Ready Prototype
+    </div>
+  </div>
+</footer>
+
+<!-- Toast -->
+<div id="toast" class="hidden fixed bottom-6 right-6 z-50 px-5 py-3 rounded-xl text-white text-sm font-semibold shadow-2xl"></div>
+
+<!-- Cart badge -->
+<div id="cartBadge" class="hidden fixed bottom-6 left-6 z-50 btn-p px-5 py-3 rounded-2xl font-bold text-sm shadow-2xl cursor-pointer" onclick="showCart()">
+  🛒 <span id="cartCount">0</span> items · ₹<span id="cartTotal">0</span>
+</div>
+
+<script>
+'use strict';
+// ═══════════════════════════════════════════════════════════
+//  STATE
+// ═══════════════════════════════════════════════════════════
+const S = {
+  lang:'en', dark:false, authMode:'signin', user:null,
+  filter:'all', rating:0, stepActive:0,
+  cake:{ flavour:'',flavourPrice:0, tiers:'',tiersPrice:0, weight:'',weightPrice:0, frost:'',frostPrice:0, msg:'' },
+  cart:[], products:[], reviews:[], gallery:[], offers:[],
+};
+
+// ═══════════════════════════════════════════════════════════
+//  SEED DATA
+// ═══════════════════════════════════════════════════════════
+S.products = [
+  {id:1,  name:'Black Forest Cake',  nameHi:'ब्लैक फॉरेस्ट केक',  cat:'cakes',    price:650,  emoji:'🎂', desc:'Classic German chocolate & cherry',       descHi:'क्लासिक जर्मन चॉकलेट और चेरी',    inStock:true},
+  {id:2,  name:'Butter Croissant',   nameHi:'बटर क्रोइसां',        cat:'pastries', price:80,   emoji:'🥐', desc:'Flaky, golden, baked every morning',      descHi:'हर सुबह ताज़ा बेक किया हुआ',       inStock:true},
+  {id:3,  name:'Sourdough Loaf',     nameHi:'सॉरडो लोफ',           cat:'breads',   price:180,  emoji:'🍞', desc:'Tangy artisan sourdough, crispy crust',   descHi:'कुरकुरी परत के साथ आर्टिसन ब्रेड', inStock:true},
+  {id:4,  name:'Choco Chip Cookies', nameHi:'चॉको चिप कुकीज़',     cat:'cookies',  price:120,  emoji:'🍪', desc:'Loaded with Belgian chocolate chips',     descHi:'बेल्जियन चॉकलेट चिप्स से भरपूर',   inStock:true},
+  {id:5,  name:'Red Velvet Cake',    nameHi:'रेड वेलवेट केक',      cat:'cakes',    price:750,  emoji:'🍰', desc:'Velvety layers, cream cheese frosting',   descHi:'क्रीम चीज़ फ्रॉस्टिंग के साथ',     inStock:true},
+  {id:6,  name:'Almond Danish',      nameHi:'बादाम डेनिश',         cat:'pastries', price:95,   emoji:'🥧', desc:'Buttery pastry, almond cream filling',    descHi:'बादाम क्रीम से भरी पेस्ट्री',      inStock:false},
+  {id:7,  name:'Multigrain Bread',   nameHi:'मल्टीग्रेन ब्रेड',    cat:'breads',   price:140,  emoji:'🫓', desc:'Wholesome blend of 7 grains & seeds',     descHi:'7 अनाज और बीजों का मिश्रण',        inStock:true},
+  {id:8,  name:'Macarons Box (6)',   nameHi:'मैकरॉन बॉक्स (6)',    cat:'cookies',  price:320,  emoji:'🫐', desc:'Assorted French macarons, seasonal',      descHi:'मौसमी स्वादों में फ्रेंच मैकरॉन',  inStock:true},
+  {id:9,  name:'Mango Mousse Cake',  nameHi:'आम मूस केक',          cat:'cakes',    price:820,  emoji:'🥭', desc:'Alphonso mango with light mousse',        descHi:'अल्फांसो आम के साथ हल्का मूस',     inStock:false},
+  {id:10, name:'Cinnamon Roll',      nameHi:'दालचीनी रोल',         cat:'pastries', price:75,   emoji:'🌀', desc:'Warm, gooey, cream cheese glaze',         descHi:'क्रीम चीज़ ग्लेज़ के साथ गर्म रोल', inStock:true},
+  {id:11, name:'Focaccia Bread',     nameHi:'फोकाशिया ब्रेड',      cat:'breads',   price:160,  emoji:'🫓', desc:'Herb-infused Italian flatbread',          descHi:'जड़ी-बूटी और जैतून तेल के साथ',    inStock:true},
+  {id:12, name:'Shortbread Fingers', nameHi:'शॉर्टब्रेड फिंगर्स',  cat:'cookies',  price:90,   emoji:'🍘', desc:'Melt-in-mouth Scottish butter shortbread',descHi:'मुंह में घुलने वाला बटर शॉर्टब्रेड', inStock:true},
+  {id:13, name:'Butter Biscuits',    nameHi:'बटर बिस्किट',         cat:'biscuits', price:60,   emoji:'🫙', desc:'Crispy golden butter biscuits, 200g tin', descHi:'कुरकुरे बटर बिस्किट, 200g टिन',    inStock:true},
+  {id:14, name:'Jeera Biscuits',     nameHi:'जीरा बिस्किट',        cat:'biscuits', price:45,   emoji:'🟤', desc:'Classic cumin-flavoured tea biscuits',    descHi:'क्लासिक जीरा चाय बिस्किट',         inStock:true},
+  {id:15, name:'Aloo Bhujia',        nameHi:'आलू भुजिया',          cat:'namkeen',  price:80,   emoji:'🌾', desc:'Crispy potato sev, Kanpur special recipe',descHi:'कुरकुरी आलू सेव, कानपुर स्पेशल',   inStock:true},
+  {id:16, name:'Mix Namkeen',        nameHi:'मिक्स नमकीन',         cat:'namkeen',  price:95,   emoji:'🥜', desc:'Assorted spicy namkeen with peanuts',     descHi:'मूंगफली के साथ मिक्स नमकीन',       inStock:false},
+  {id:17, name:'Samosa (2 pcs)',     nameHi:'समोसा (2 पीस)',        cat:'snacks',   price:30,   emoji:'🥟', desc:'Freshly fried crispy potato samosas',     descHi:'ताज़े तले हुए आलू समोसे',           inStock:true},
+  {id:18, name:'Kachori (2 pcs)',    nameHi:'कचौरी (2 पीस)',        cat:'snacks',      price:25,   emoji:'🫔', desc:'Flaky dal-stuffed kachori, served hot',   descHi:'दाल भरी कचौरी, गर्म परोसी जाती है', inStock:true},
+  {id:19, name:'Mango Frooti',       nameHi:'मैंगो फ्रूटी',         cat:'colddrinks',   price:20,   emoji:'🥭', desc:'Chilled mango fruit drink, 200ml',        descHi:'ठंडा आम फ्रूट ड्रिंक, 200ml',       inStock:true},
+  {id:20, name:'Limca Lemon Soda',   nameHi:'लिम्का लेमन सोडा',     cat:'colddrinks',   price:25,   emoji:'🍋', desc:'Refreshing lemon-lime fizzy drink, 300ml',descHi:'ताज़गी भरा नींबू सोडा, 300ml',       inStock:true},
+  {id:21, name:'Thums Up Cola',      nameHi:'थम्स अप कोला',         cat:'colddrinks',   price:30,   emoji:'🥤', desc:'Strong sparkling cola, 300ml bottle',     descHi:'स्ट्रॉन्ग स्पार्कलिंग कोला, 300ml', inStock:true},
+  {id:22, name:'Rooh Afza Sharbat',  nameHi:'रूह अफ़ज़ा शरबत',      cat:'colddrinks',   price:35,   emoji:'🌹', desc:'Rose-flavoured chilled sharbat, 250ml',   descHi:'गुलाब शरबत, ठंडा, 250ml',           inStock:false},
+  {id:23, name:'Vanilla Scoop',      nameHi:'वनीला स्कूप',          cat:'icecream',     price:40,   emoji:'🍦', desc:'Classic creamy vanilla soft serve',       descHi:'क्लासिक क्रीमी वनीला सॉफ्ट सर्व',  inStock:true},
+  {id:24, name:'Chocolate Sundae',   nameHi:'चॉकलेट संडे',          cat:'icecream',     price:80,   emoji:'🍫', desc:'Rich chocolate ice cream with hot fudge', descHi:'हॉट फज के साथ चॉकलेट आइसक्रीम',    inStock:true},
+  {id:25, name:'Mango Kulfi',        nameHi:'आम कुल्फी',            cat:'icecream',     price:50,   emoji:'🥭', desc:'Traditional Alphonso mango kulfi stick',  descHi:'अल्फांसो आम की पारंपरिक कुल्फी',    inStock:true},
+  {id:26, name:'Strawberry Cone',    nameHi:'स्ट्रॉबेरी कोन',       cat:'icecream',     price:45,   emoji:'🍓', desc:'Fresh strawberry ice cream waffle cone',  descHi:'ताज़ी स्ट्रॉबेरी आइसक्रीम कोन',     inStock:false},
+];
+
+S.reviews = [
+  {id:1, name:'Priya Sharma',  rating:5, content:"The Black Forest cake was absolutely divine! Perfect for my daughter's birthday.", date:'2024-05-20'},
+  {id:2, name:'Rahul Gupta',   rating:5, content:'Best sourdough in Kanpur, hands down. The crust is perfect and inside so soft!',  date:'2024-05-18'},
+  {id:3, name:'Anita Verma',   rating:4, content:'Lovely pastries, very fresh. The croissants are buttery and flaky. Great treat!',  date:'2024-05-15'},
+];
+
+S.gallery = [
+  {id:1,  emoji:'🎂', cap:'Custom Wedding Cake',    capHi:'कस्टम वेडिंग केक',    tall:true,  wide:false},
+  {id:2,  emoji:'🥐', cap:'Morning Croissants',     capHi:'सुबह के क्रोइसां',     tall:false, wide:false},
+  {id:3,  emoji:'🍰', cap:'Red Velvet Slice',       capHi:'रेड वेलवेट स्लाइस',    tall:false, wide:false},
+  {id:4,  emoji:'🍞', cap:'Artisan Bread Basket',   capHi:'आर्टिसन ब्रेड बास्केट',tall:false, wide:true},
+  {id:5,  emoji:'🧁', cap:'Cupcake Collection',     capHi:'कपकेक कलेक्शन',        tall:false, wide:false},
+  {id:6,  emoji:'🍩', cap:'Glazed Donuts',          capHi:'ग्लेज़्ड डोनट्स',      tall:false, wide:false},
+  {id:7,  emoji:'🥧', cap:'Fruit Tart Display',     capHi:'फ्रूट टार्ट डिस्प्ले', tall:true,  wide:false},
+  {id:8,  emoji:'🫐', cap:'Macaron Tower',          capHi:'मैकरॉन टॉवर',          tall:false, wide:false},
+  {id:9,  emoji:'🍫', cap:'Chocolate Ganache Cake', capHi:'चॉकलेट गनाश केक',      tall:false, wide:false},
+  {id:10, emoji:'🌸', cap:'Floral Fondant Cake',    capHi:'फ्लोरल फोंडेंट केक',   tall:false, wide:false},
+  {id:11, emoji:'🥭', cap:'Mango Season Special',   capHi:'आम सीज़न स्पेशल',      tall:false, wide:true},
+  {id:12, emoji:'🎉', cap:'Celebration Spread',     capHi:'उत्सव की थाली',        tall:false, wide:false},
+];
+
+const STEPS = [
+  {icon:'🧑‍🍳', en:'Order Received',    hi:'ऑर्डर मिला'},
+  {icon:'🥣',  en:'Mixing',             hi:'मिक्सिंग'},
+  {icon:'🔥',  en:'Baking',             hi:'बेकिंग'},
+  {icon:'❄️',  en:'Cooling',            hi:'ठंडा हो रहा है'},
+  {icon:'🎨',  en:'Decorating',         hi:'सजावट'},
+  {icon:'📦',  en:'Packaging',          hi:'पैकेजिंग'},
+  {icon:'🚚',  en:'Out for Delivery',   hi:'डिलीवरी पर'},
+  {icon:'✅',  en:'Ready / Delivered',  hi:'तैयार / डिलीवर'},
+];
+
+// ═══════════════════════════════════════════════════════════
+//  INIT
+// ═══════════════════════════════════════════════════════════
+document.addEventListener('DOMContentLoaded', () => {
+  renderProducts();
+  renderGallery();
+  renderReviews();
+  updateRatingSummary();
+  renderStepper(0);
+  startCountdown();
+  applyLang();
+  // Set min date for delivery
+  const today = new Date().toISOString().split('T')[0];
+  document.getElementById('delivDate').min = today;
+  document.getElementById('delivDate').value = today;
+  // Gift card live preview
+  document.getElementById('giftMsg').addEventListener('input', updateGiftPreview);
+  document.getElementById('giftRecipient').addEventListener('input', updateGiftPreview);
+});
+
+// ═══════════════════════════════════════════════════════════
+//  DARK MODE
+// ═══════════════════════════════════════════════════════════
+function toggleDark() {
+  S.dark = !S.dark;
+  document.body.classList.toggle('dark', S.dark);
+  document.getElementById('darkBtn').textContent = S.dark ? '☀️' : '🌙';
+}
+
+// ═══════════════════════════════════════════════════════════
+//  LANGUAGE
+// ═══════════════════════════════════════════════════════════
+function toggleLang() {
+  S.lang = S.lang === 'en' ? 'hi' : 'en';
+  document.getElementById('langBtn').textContent = S.lang === 'en' ? 'हिंदी' : 'English';
+  applyLang();
+  renderProducts(); renderGallery(); renderReviews(); updateRatingSummary(); renderStepper(S.stepActive);
+}
+
+function applyLang() {
+  const hi = S.lang === 'hi';
+  document.documentElement.lang = hi ? 'hi' : 'en';
+  document.querySelectorAll('[data-en]').forEach(el => {
+    el.textContent = hi ? (el.dataset.hi || el.dataset.en) : el.dataset.en;
+  });
+  document.getElementById('bName').textContent = hi ? 'शुक्ला बेकरी' : 'Shukla Bakery';
+  document.getElementById('bTag').textContent  = hi ? 'प्यार से बना' : 'Baked with Love';
+  document.getElementById('heroH').innerHTML   = hi ? 'रोज़ ताज़ा बेक,<br/>हर एक दिन' : 'Freshly Baked,<br/>Every Single Day';
+  document.getElementById('heroP').textContent = hi
+    ? 'आर्टिसन ब्रेड, उत्सव केक और हस्तनिर्मित पेस्ट्री — पीढ़ियों के प्यार से बनाई गई।'
+    : 'Artisan breads, celebration cakes & handcrafted pastries — made with generations of love.';
+  const rn = document.getElementById('rName');
+  const rc = document.getElementById('rContent');
+  if (rn) rn.placeholder = hi ? 'आपका नाम' : 'Your Name';
+  if (rc) rc.placeholder = hi ? 'अपना अनुभव बताएं...' : 'Tell us about your experience...';
+}
+
+function toggleMob() { document.getElementById('mobNav').classList.toggle('hidden'); }
+
+// ═══════════════════════════════════════════════════════════
+//  AUTH — HARDENED RBAC
+// ═══════════════════════════════════════════════════════════
+
+// Pre-configured test accounts (simulates Cognito user pool)
+const ACCOUNTS = {
+  'customer@gmail.com':       { pass:'customer123', role:'client',  name:'Customer' },
+  'owner@shuklabakery.com':   { pass:'owner123',    role:'admin',   name:'Bakery Owner' },
+};
+
+function quickFill(email, pass) {
+  document.getElementById('aEmail').value = email;
+  document.getElementById('aPass').value  = pass;
+  document.getElementById('aErr').classList.add('hidden');
+}
+
+function openAuth()  { document.getElementById('authModal').classList.remove('hidden'); document.body.style.overflow='hidden'; }
+function closeAuth() { document.getElementById('authModal').classList.add('hidden');    document.body.style.overflow=''; document.getElementById('aErr').classList.add('hidden'); }
+document.getElementById('authModal').addEventListener('click', e => { if(e.target===document.getElementById('authModal')) closeAuth(); });
+
+function doAuth() {
+  const email = document.getElementById('aEmail').value.trim().toLowerCase();
+  const pass  = document.getElementById('aPass').value;
+  const err   = document.getElementById('aErr');
+  const hi    = S.lang === 'hi';
+
+  if (!email || !pass) {
+    err.textContent = hi?'कृपया ईमेल और पासवर्ड दर्ज करें।':'Please enter email and password.';
+    err.classList.remove('hidden'); return;
+  }
+
+  const account = ACCOUNTS[email];
+  if (!account) {
+    err.textContent = hi?'यह ईमेल पंजीकृत नहीं है।':'This email is not registered. Use a test account above.';
+    err.classList.remove('hidden'); return;
+  }
+  if (account.pass !== pass) {
+    err.textContent = hi?'गलत पासवर्ड।':'Incorrect password.';
+    err.classList.remove('hidden'); return;
+  }
+
+  S.user = { email, role: account.role, name: account.name };
+  closeAuth();
+  updateAuthUI();
+  renderProducts();
+  renderCockpit();
+  showToast(hi
+    ? `स्वागत है, ${account.name}! ${account.role==='admin'?'🔑 Owner Mode Active':'👤 Customer Mode'}`
+    : `Welcome, ${account.name}! ${account.role==='admin'?'🔑 Owner Mode Active':'👤 Customer Mode'}`
+  );
+}
+
+function updateAuthUI() {
+  const hi = S.lang === 'hi';
+  const area = document.getElementById('authArea');
+  const cockpit = document.getElementById('cockpit');
+  const cockpitNav = document.getElementById('cockpitNavLink');
+
+  if (S.user) {
+    const isAdmin = S.user.role === 'admin';
+    area.innerHTML = `<div class="flex items-center gap-2">
+      <span class="${isAdmin?'role-admin':'role-customer'}">${isAdmin?'OWNER':'CUSTOMER'}</span>
+      <span class="text-xs font-medium hidden sm:inline" style="color:var(--txt2)">${S.user.email.split('@')[0]}</span>
+      <button onclick="signOut()" class="btn-s px-3 py-1.5 rounded-lg text-xs font-bold transition-all">${hi?'साइन आउट':'Sign Out'}</button>
+    </div>`;
+    // Show/hide admin form in shop
+    document.getElementById('adminForm').classList.toggle('hidden', !isAdmin);
+    // Show/hide cockpit section
+    cockpit.classList.toggle('hidden', !isAdmin);
+    if (cockpitNav) cockpitNav.classList.toggle('hidden', !isAdmin);
+  } else {
+    area.innerHTML = `<button onclick="openAuth()" class="btn-p px-4 py-2 rounded-xl text-sm font-semibold transition-all">${hi?'साइन इन':'Sign In'}</button>`;
+    document.getElementById('adminForm').classList.add('hidden');
+    cockpit.classList.add('hidden');
+    if (cockpitNav) cockpitNav.classList.add('hidden');
+  }
+}
+
+function signOut() {
+  S.user = null;
+  updateAuthUI();
+  renderProducts();
+  showToast(S.lang==='hi'?'आप साइन आउट हो गए।':'Signed out successfully.');
+}
+
+// ═══════════════════════════════════════════════════════════
+//  OWNER COCKPIT
+// ═══════════════════════════════════════════════════════════
+function renderCockpit() {
+  if (!S.user || S.user.role !== 'admin') return;
+  const hi = S.lang === 'hi';
+
+  // Stats
+  const total   = S.products.length;
+  const inStock = S.products.filter(p => p.inStock !== false).length;
+  const oos     = total - inStock;
+  const cats    = [...new Set(S.products.map(p=>p.cat))].length;
+  const statsEl = document.getElementById('cockpitStats');
+  const stats   = [
+    { icon:'📦', val:total,   lbl:hi?'कुल उत्पाद':'Total Products' },
+    { icon:'✅', val:inStock, lbl:hi?'स्टॉक में':'In Stock',  color:'#4ade80' },
+    { icon:'❌', val:oos,     lbl:hi?'स्टॉक आउट':'Out of Stock', color:'#f87171' },
+    { icon:'🏷️', val:cats,   lbl:hi?'श्रेणियां':'Categories' },
+  ];
+  statsEl.innerHTML = stats.map(s=>`
+    <div class="stat-card">
+      <div class="text-3xl mb-2">${s.icon}</div>
+      <div class="pf text-3xl font-bold text-white" style="${s.color?'color:'+s.color:''}">${s.val}</div>
+      <div class="text-xs mt-1" style="color:rgba(255,255,255,.5)">${s.lbl}</div>
+    </div>`).join('');
+
+  // Inventory rows
+  const grid = document.getElementById('cockpitGrid');
+  grid.innerHTML = '';
+  S.products.forEach(p => {
+    const inStock = p.inStock !== false;
+    const catBdg = {cakes:'bdg-c',pastries:'bdg-p',breads:'bdg-b',cookies:'bdg-k',biscuits:'bdg-b',namkeen:'bdg-k',snacks:'bdg-p',colddrinks:'bdg-c',icecream:'bdg-p'}[p.cat]||'bdg-c';
+    const row = document.createElement('div');
+    row.id = 'ck-'+p.id;
+    row.className = 'cockpit-card rounded-xl p-4 flex items-center gap-4 transition-all duration-300';
+    row.innerHTML = `
+      <span class="text-3xl flex-shrink-0">${p.emoji}</span>
+      <div class="flex-1 min-w-0">
+        <div class="flex items-center gap-2 flex-wrap">
+          <span class="font-bold text-white text-sm truncate">${hi?p.nameHi:p.name}</span>
+          <span class="bdg ${catBdg}">${p.cat}</span>
+        </div>
+        <div class="text-xs mt-0.5" style="color:rgba(255,255,255,.45)">₹${p.price} · ID: ${p.id}</div>
+      </div>
+      <!-- Stock Toggle -->
+      <div class="flex items-center gap-3 flex-shrink-0">
+        <span class="text-xs font-bold ${inStock?'text-green-400':'text-red-400'}" id="stklbl-${p.id}">${inStock?(hi?'स्टॉक में':'In Stock'):(hi?'स्टॉक आउट':'Out of Stock')}</span>
+        <label class="stk-toggle ${inStock?'stk-on':'stk-off'}" id="stktog-${p.id}" onclick="toggleStock(${p.id})">
+          <div class="stk-track"></div>
+          <div class="stk-thumb"></div>
+        </label>
+        <button onclick="delProd(${p.id})" class="px-3 py-1.5 rounded-lg text-xs font-bold border border-red-500/50 text-red-400 hover:bg-red-500 hover:text-white transition-all">
+          🗑️ ${hi?'हटाएं':'Delete'}
+        </button>
+      </div>`;
+    grid.appendChild(row);
+  });
+}
+
+function toggleStock(id) {
+  const p = S.products.find(x=>x.id===id);
+  if (!p) return;
+  p.inStock = p.inStock === false ? true : false;
+  const hi = S.lang==='hi';
+  const inStock = p.inStock !== false;
+
+  // Update cockpit row label + toggle class
+  const lbl = document.getElementById('stklbl-'+id);
+  const tog = document.getElementById('stktog-'+id);
+  if (lbl) lbl.textContent = inStock?(hi?'स्टॉक में':'In Stock'):(hi?'स्टॉक आउट':'Out of Stock');
+  if (lbl) lbl.className = `text-xs font-bold ${inStock?'text-green-400':'text-red-400'}`;
+  if (tog) { tog.classList.toggle('stk-on', inStock); tog.classList.toggle('stk-off', !inStock); }
+
+  // Re-render product card to show/hide OOS overlay
+  renderProducts();
+  renderCockpit(); // refresh stats
+
+  showToast(inStock
+    ? (hi?`${p.nameHi} स्टॉक में है ✅`:`${p.name} is now In Stock ✅`)
+    : (hi?`${p.nameHi} स्टॉक आउट ❌`:`${p.name} marked Out of Stock ❌`),
+    !inStock
+  );
+}
+</script>
+
+<script>
+// ═══════════════════════════════════════════════════════════
+//  COUNTDOWN TIMER
+// ═══════════════════════════════════════════════════════════
+function startCountdown() {
+  // Set target to end of today
+  const now = new Date();
+  const target = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59, 59);
+  function tick() {
+    const diff = target - new Date();
+    if (diff <= 0) { document.getElementById('cdH').textContent='00'; document.getElementById('cdM').textContent='00'; document.getElementById('cdS').textContent='00'; return; }
+    const h = Math.floor(diff/3600000), m = Math.floor((diff%3600000)/60000), s = Math.floor((diff%60000)/1000);
+    document.getElementById('cdH').textContent = String(h).padStart(2,'0');
+    document.getElementById('cdM').textContent = String(m).padStart(2,'0');
+    document.getElementById('cdS').textContent = String(s).padStart(2,'0');
+  }
+  tick(); setInterval(tick, 1000);
+}
+
+// ═══════════════════════════════════════════════════════════
+//  CAKE BUILDER
+// ═══════════════════════════════════════════════════════════
+const CAKE_EMOJIS = { Chocolate:'🍫', Vanilla:'🍦', 'Red Velvet':'❤️', Mango:'🥭', Strawberry:'🍓', Butterscotch:'🧈' };
+
+function pick(field, val, price, btn) {
+  S.cake[field] = val;
+  S.cake[field+'Price'] = price;
+  // Deselect siblings
+  btn.closest('div').querySelectorAll('.opt-btn').forEach(b => b.classList.remove('sel'));
+  btn.classList.add('sel');
+  updatePreview();
+}
+
+function updatePreview() {
+  const c = S.cake;
+  const msg = document.getElementById('cakeMsg').value;
+  c.msg = msg;
+  document.getElementById('msgLen').textContent = msg.length;
+  // Emoji
+  const em = CAKE_EMOJIS[c.flavour] || '🎂';
+  document.getElementById('cakeEmoji').textContent = em;
+  // Message display
+  document.getElementById('cakeMsgDisplay').textContent = msg || '';
+  // Preview fields
+  document.getElementById('pvFlavour').textContent = c.flavour  || '—';
+  document.getElementById('pvTiers').textContent   = c.tiers    || '—';
+  document.getElementById('pvWeight').textContent  = c.weight   || '—';
+  document.getElementById('pvFrost').textContent   = c.frost    || '—';
+  // Price
+  const base = c.flavourPrice, tiers = c.tiersPrice, wt = c.weightPrice, fr = c.frostPrice;
+  const total = base + tiers + wt + fr;
+  document.getElementById('pbBase').textContent   = '₹'+base;
+  document.getElementById('pbTiers').textContent  = '₹'+tiers;
+  document.getElementById('pbWeight').textContent = '₹'+wt;
+  document.getElementById('pbFrost').textContent  = '₹'+fr;
+  document.getElementById('pbTotal').textContent  = '₹'+total;
+}
+
+function addCakeToCart() {
+  const c = S.cake, hi = S.lang === 'hi';
+  if (!c.flavour || !c.tiers || !c.weight || !c.frost) {
+    showToast(hi?'कृपया सभी विकल्प चुनें।':'Please select all options.', true); return;
+  }
+  const total = c.flavourPrice + c.tiersPrice + c.weightPrice + c.frostPrice;
+  S.cart.push({ name: `Custom ${c.flavour} Cake`, price: total, qty: 1 });
+  updateCartBadge();
+  showToast(hi?`कस्टम ${c.flavour} केक कार्ट में जोड़ा! 🎂`:`Custom ${c.flavour} Cake added to cart! 🎂`);
+}
+
+// ═══════════════════════════════════════════════════════════
+//  PRODUCTS
+// ═══════════════════════════════════════════════════════════
+function renderProducts() {
+  const hi = S.lang === 'hi', isAdmin = S.user?.role === 'admin';
+  const grid = document.getElementById('prodGrid');
+  const empty = document.getElementById('prodEmpty');
+  const list = S.filter === 'all' ? S.products : S.products.filter(p => p.cat === S.filter);
+  grid.innerHTML = '';
+  if (!list.length) { empty.classList.remove('hidden'); return; }
+  empty.classList.add('hidden');
+  list.forEach(p => {
+    const inStock = p.inStock !== false;
+    const catBdgMap = {cakes:'bdg-c',pastries:'bdg-p',breads:'bdg-b',cookies:'bdg-k',biscuits:'bdg-b',namkeen:'bdg-k',snacks:'bdg-p',colddrinks:'bdg-c',icecream:'bdg-p'};
+    const catLblMap = {cakes:['Cake','केक'],pastries:['Pastry','पेस्ट्री'],breads:['Bread','ब्रेड'],cookies:['Cookie','कुकी'],biscuits:['Biscuit','बिस्किट'],namkeen:['Namkeen','नमकीन'],snacks:['Snack','स्नैक'],colddrinks:['Cold Drink','कोल्ड ड्रिंक'],icecream:['Ice Cream','आइसक्रीम']};
+    const catBdg = catBdgMap[p.cat]||'bdg-c';
+    const catLbl = catLblMap[p.cat]||[p.cat,p.cat];
+    const div = document.createElement('div');
+    div.id = 'pc-'+p.id;
+    div.className = 'card rounded-2xl overflow-hidden transition-all duration-300 relative';
+    if (!inStock) div.style.opacity = '0.75';
+    div.innerHTML = `
+      <div class="relative flex items-center justify-center text-6xl py-8" style="background:linear-gradient(135deg,var(--accl),var(--bg2))">
+        ${p.emoji}
+        ${!inStock ? `<div class="oos-overlay rounded-none"><span class="oos-badge">${hi?'स्टॉक आउट':'Out of Stock'}</span></div>` : ''}
+      </div>
+      <div class="p-4">
+        <div class="flex items-start justify-between gap-2 mb-1">
+          <h3 class="pf font-bold text-base leading-tight">${hi?p.nameHi:p.name}</h3>
+          <span class="bdg ${catBdg} flex-shrink-0">${hi?catLbl[1]:catLbl[0]}</span>
+        </div>
+        <p class="text-xs mb-3 leading-relaxed" style="color:var(--txt2)">${hi?p.descHi:p.desc}</p>
+        <div class="flex items-center justify-between">
+          <span class="pf font-bold text-lg" style="color:var(--acc)">₹${p.price}</span>
+          ${inStock
+            ? `<button onclick="addToCart(${p.id})" class="btn-p px-4 py-1.5 rounded-lg text-xs font-bold transition-all hover:scale-105">${hi?'कार्ट में डालें':'Add to Cart'}</button>`
+            : `<span class="px-4 py-1.5 rounded-lg text-xs font-bold" style="background:#fee2e2;color:#ef4444">${hi?'उपलब्ध नहीं':'Unavailable'}</span>`
+          }
+        </div>
+        ${isAdmin ? `<div class="mt-3 pt-3 flex gap-2" style="border-top:1px solid var(--bdr)">
+          <button onclick="editProd(${p.id})" class="flex-1 px-3 py-1.5 rounded-lg text-xs font-bold border transition-all hover:scale-105" style="border-color:var(--acc);color:var(--acc)">✏️ ${hi?'संपादित':'Edit'}</button>
+          <button onclick="delProd(${p.id})"  class="flex-1 px-3 py-1.5 rounded-lg text-xs font-bold border border-red-400 text-red-400 hover:bg-red-400 hover:text-white transition-all hover:scale-105">🗑️ ${hi?'हटाएं':'Delete'}</button>
+        </div>` : ''}
+      </div>`;
+    grid.appendChild(div);
+  });
+}
+
+function filterProd(cat) {
+  S.filter = cat;
+  document.querySelectorAll('.fil-btn').forEach(b => {
+    const en = (b.dataset.en||'').toLowerCase();
+    b.classList.toggle('on', cat==='all' ? en==='all' : en===cat);
+  });
+  renderProducts();
+}
+
+function addToCart(id) {
+  const p = S.products.find(x=>x.id===id), hi = S.lang==='hi';
+  if (!p) return;
+  if (p.inStock === false) { showToast(hi?'यह आइटम अभी उपलब्ध नहीं है।':'This item is currently out of stock.', true); return; }
+  const ex = S.cart.find(x=>x.id===id);
+  if (ex) ex.qty++; else S.cart.push({id:p.id, name:hi?p.nameHi:p.name, price:p.price, qty:1});
+  updateCartBadge();
+  showToast(hi?`${p.nameHi} कार्ट में जोड़ा! 🛒`:`${p.name} added to cart! 🛒`);
+}
+
+function addProduct() {
+  const hi = S.lang==='hi';
+  const name=document.getElementById('nName').value.trim(), price=parseFloat(document.getElementById('nPrice').value),
+        cat=document.getElementById('nCat').value, emoji=document.getElementById('nEmoji').value.trim()||'🍰',
+        desc=document.getElementById('nDesc').value.trim();
+  if (!name||!price||!desc) { showToast(hi?'सभी फ़ील्ड भरें।':'Fill all fields.', true); return; }
+  S.products.unshift({id:Date.now(), name, nameHi:name, cat, price, emoji, desc, descHi:desc, inStock:true});
+  ['nName','nPrice','nEmoji','nDesc'].forEach(id=>document.getElementById(id).value='');
+  renderProducts();
+  renderCockpit();
+  showToast(hi?`${name} जोड़ा गया! ✅`:`${name} added! ✅`);
+}
+
+function delProd(id) {
+  const p=S.products.find(x=>x.id===id), hi=S.lang==='hi';
+  if (!p) return;
+  const el=document.getElementById('pc-'+id);
+  if (el) { el.style.opacity='0'; el.style.transform='scale(0.85)'; el.style.transition='all .3s'; }
+  setTimeout(()=>{ S.products=S.products.filter(x=>x.id!==id); renderProducts(); renderCockpit(); }, 300);
+  showToast(hi?`${p.nameHi} हटाया गया।`:`${p.name} removed.`);
+}
+
+function editProd(id) {
+  const p=S.products.find(x=>x.id===id), hi=S.lang==='hi';
+  if (!p) return;
+  const np=prompt(hi?`${p.nameHi} की नई कीमत:`:`New price for ${p.name}:`, p.price);
+  if (np!==null && !isNaN(parseFloat(np))) { p.price=parseFloat(np); renderProducts(); showToast(hi?'कीमत अपडेट! ✅':'Price updated! ✅'); }
+}
+
+function updateCartBadge() {
+  const total = S.cart.reduce((s,i)=>s+i.price*i.qty,0);
+  const count = S.cart.reduce((s,i)=>s+i.qty,0);
+  document.getElementById('cartCount').textContent = count;
+  document.getElementById('cartTotal').textContent = total;
+  document.getElementById('cartBadge').classList.toggle('hidden', count===0);
+}
+
+function showCart() {
+  const hi = S.lang==='hi';
+  const lines = S.cart.map(i=>`${i.name} x${i.qty} = ₹${i.price*i.qty}`).join('\n');
+  const total = S.cart.reduce((s,i)=>s+i.price*i.qty,0);
+  alert((hi?'आपका कार्ट:\n':'Your Cart:\n')+lines+'\n\n'+(hi?'कुल: ₹':'Total: ₹')+total);
+}
+
+// ═══════════════════════════════════════════════════════════
+//  ORDER STEPPER
+// ═══════════════════════════════════════════════════════════
+function renderStepper(active) {
+  S.stepActive = active;
+  const hi = S.lang==='hi';
+  const wrap = document.getElementById('stepperUI');
+  const pct = Math.round((active/(STEPS.length-1))*100);
+  document.getElementById('stepPct').textContent = pct+'%';
+  document.getElementById('stepProgFill').style.width = pct+'%';
+
+  let html = '<div class="flex flex-wrap justify-between gap-y-6 relative">';
+  STEPS.forEach((st, i) => {
+    const done   = i < active;
+    const cur    = i === active;
+    const cls    = done ? 'step-done' : cur ? 'step-active' : 'step-wait';
+    const txtcls = done||cur ? 'font-bold' : 'opacity-50';
+    html += `<div class="flex flex-col items-center gap-2 flex-1 min-w-[80px]">
+      <div class="w-12 h-12 rounded-full flex items-center justify-center text-xl ${cls} transition-all duration-500">${st.icon}</div>
+      <span class="text-xs text-center ${txtcls}" style="color:${done||cur?'var(--acc)':'var(--txt2)'}">${hi?st.hi:st.en}</span>
+    </div>`;
+  });
+  html += '</div>';
+  wrap.innerHTML = html;
+
+  const msgs = {
+    en:['Order received! We\'re getting started.','Mixing the finest ingredients...','In the oven — smells amazing!','Cooling down to perfection.','Adding those beautiful decorations!','Carefully packaging your order.','On the way to you!','Your order is ready! Enjoy! 🎉'],
+    hi:['ऑर्डर मिल गया! हम शुरू हो रहे हैं।','बेहतरीन सामग्री मिलाई जा रही है...','ओवन में — खुशबू आ रही है!','परफेक्ट तरीके से ठंडा हो रहा है।','सुंदर सजावट हो रही है!','आपका ऑर्डर पैक हो रहा है।','आपके रास्ते पर है!','आपका ऑर्डर तैयार है! आनंद लें! 🎉']
+  };
+  document.getElementById('stepMsg').textContent = (hi?msgs.hi:msgs.en)[active] || '';
+}
+
+function trackOrder() {
+  const id = document.getElementById('orderIdInput').value.trim();
+  if (!id) { showToast(S.lang==='hi'?'ऑर्डर ID दर्ज करें।':'Enter an Order ID.', true); return; }
+  // Simulate: hash the ID to a step
+  const step = id.length % STEPS.length;
+  renderStepper(step);
+  showToast(S.lang==='hi'?`ऑर्डर ${id} मिला! स्टेप ${step+1} पर है।`:`Order ${id} found! At step ${step+1}.`);
+}
+
+function demoTrack() {
+  let step = 0;
+  renderStepper(step);
+  const iv = setInterval(()=>{
+    step++;
+    if (step >= STEPS.length) { clearInterval(iv); return; }
+    renderStepper(step);
+  }, 900);
+}
+
+// ═══════════════════════════════════════════════════════════
+//  GIFTING
+// ═══════════════════════════════════════════════════════════
+function toggleGift() {
+  const on = document.getElementById('giftToggle').checked;
+  document.getElementById('giftCardWrap').classList.toggle('hidden', !on);
+}
+
+function updateGiftPreview() {
+  const msg = document.getElementById('giftMsg').value || (S.lang==='hi'?'आपका संदेश यहाँ दिखेगा...':'Your message will appear here...');
+  const to  = document.getElementById('giftRecipient').value || '—';
+  document.getElementById('gpTo').textContent  = 'To: '+to;
+  document.getElementById('gpMsg').textContent = msg;
+}
+
+function scheduleOrder() {
+  const hi = S.lang==='hi';
+  const date = document.getElementById('delivDate').value;
+  const time = document.getElementById('delivTime').value;
+  const del  = document.querySelector('input[name="delivery"]:checked')?.value || 'standard';
+  const isGift = document.getElementById('giftToggle').checked;
+  const msg = isGift ? (hi?'🎁 गिफ्ट ऑर्डर शेड्यूल किया गया!':'🎁 Gift order scheduled!') : (hi?'✅ ऑर्डर शेड्यूल किया गया!':'✅ Order scheduled!');
+  showToast(`${msg} ${date} · ${time}`);
+  if (del==='midnight') showToast(hi?'🌙 मिडनाइट डिलीवरी कन्फर्म!':'🌙 Midnight delivery confirmed!');
+}
+
+// ═══════════════════════════════════════════════════════════
+//  GALLERY
+// ═══════════════════════════════════════════════════════════
+function renderGallery() {
+  const hi = S.lang==='hi';
+  const grid = document.getElementById('galGrid');
+  grid.innerHTML = '';
+  S.gallery.forEach(g => {
+    const div = document.createElement('div');
+    div.className = `gal-item rounded-2xl flex flex-col items-center justify-center gap-2 p-4 aspect-square${g.tall?' row-span-2':''}${g.wide?' col-span-2':''}`;
+    div.style.fontSize = g.tall ? '5rem' : '3.5rem';
+    div.innerHTML = `<span>${g.emoji}</span><span class="text-xs font-medium text-center leading-tight" style="color:var(--txt2);font-size:.65rem">${hi?g.capHi:g.cap}</span>`;
+    div.onclick = () => { document.getElementById('lboxEmoji').textContent=g.emoji; document.getElementById('lboxCap').textContent=hi?g.capHi:g.cap; document.getElementById('lbox').classList.remove('hidden'); };
+    grid.appendChild(div);
+  });
+}
+
+function closeLbox() { document.getElementById('lbox').classList.add('hidden'); }
+
+// ═══════════════════════════════════════════════════════════
+//  REVIEWS
+// ═══════════════════════════════════════════════════════════
+function setRating(v) {
+  S.rating = v;
+  document.querySelectorAll('.star-i').forEach(s => s.classList.toggle('on', parseInt(s.dataset.v)<=v));
+}
+
+function submitReview() {
+  const hi = S.lang==='hi';
+  const name = document.getElementById('rName').value.trim();
+  const content = document.getElementById('rContent').value.trim();
+  if (!name||!content||!S.rating) { showToast(hi?'नाम, रेटिंग और समीक्षा भरें।':'Fill name, rating & review.', true); return; }
+  S.reviews.unshift({id:Date.now(), name, rating:S.rating, content, date:new Date().toISOString().split('T')[0]});
+  document.getElementById('rName').value=''; document.getElementById('rContent').value='';
+  S.rating=0; setRating(0);
+  renderReviews(); updateRatingSummary();
+  const ok = document.getElementById('rSuccess');
+  ok.textContent = hi?'समीक्षा सबमिट की गई! धन्यवाद 🙏':'Review submitted! Thank you 🙏';
+  ok.classList.remove('hidden');
+  setTimeout(()=>ok.classList.add('hidden'), 4000);
+  showToast(hi?'समीक्षा जोड़ी गई! 🌟':'Review added! 🌟');
+}
+
+function renderReviews() {
+  const hi = S.lang==='hi';
+  const feed = document.getElementById('revFeed');
+  feed.innerHTML = '';
+  S.reviews.forEach(r => {
+    const stars = Array.from({length:5},(_,i)=>`<span style="color:${i<r.rating?'var(--star)':'var(--stari)'};font-size:.9rem">★</span>`).join('');
+    const date  = new Date(r.date).toLocaleDateString(hi?'hi-IN':'en-IN',{year:'numeric',month:'short',day:'numeric'});
+    const div = document.createElement('div');
+    div.className = 'rev-card rounded-2xl p-5';
+    div.innerHTML = `
+      <div class="flex items-start justify-between mb-3">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-full flex items-center justify-center font-bold text-white text-sm flex-shrink-0" style="background:linear-gradient(135deg,var(--acc),var(--acch))">${r.name.charAt(0).toUpperCase()}</div>
+          <div><p class="font-bold text-sm">${r.name}</p><p class="text-xs" style="color:var(--txt2)">${date}</p></div>
+        </div>
+        <div class="flex">${stars}</div>
+      </div>
+      <p class="text-sm leading-relaxed" style="color:var(--txt2)">"${r.content}"</p>`;
+    feed.appendChild(div);
+  });
+}
+
+function updateRatingSummary() {
+  const hi = S.lang==='hi';
+  if (!S.reviews.length) return;
+  const avg = S.reviews.reduce((s,r)=>s+r.rating,0)/S.reviews.length;
+  document.getElementById('avgNum').textContent = avg.toFixed(1);
+  document.getElementById('avgStars').innerHTML = Array.from({length:5},(_,i)=>`<span style="color:${i<Math.round(avg)?'#fbbf24':'var(--stari)'}">★</span>`).join('');
+  const t = S.reviews.length;
+  document.getElementById('totalRev').textContent = hi?`${t} समीक्षाएं`:`${t} review${t!==1?'s':''}`;
+  const bars = document.getElementById('ratBars');
+  bars.innerHTML = '';
+  for (let s=5;s>=1;s--) {
+    const c=S.reviews.filter(r=>r.rating===s).length, pct=t>0?(c/t)*100:0;
+    bars.innerHTML += `<div class="flex items-center gap-2 text-xs">
+      <span style="color:var(--txt2);width:1rem;text-align:right">${s}</span>
+      <span style="color:#fbbf24;font-size:.75rem">★</span>
+      <div class="flex-1 prog-bar h-2"><div class="prog-fill h-2" style="width:${pct}%"></div></div>
+      <span style="color:var(--txt2);width:1rem">${c}</span>
+    </div>`;
+  }
+}
+
+// ═══════════════════════════════════════════════════════════
+//  CONTACT FORM
+// ═══════════════════════════════════════════════════════════
+function submitContact() {
+  const hi   = S.lang === 'hi';
+  const name = document.getElementById('ctName').value.trim();
+  const phone= document.getElementById('ctPhone').value.trim();
+  const msg  = document.getElementById('ctMsg').value.trim();
+  const pref = document.querySelector('input[name="ctPref"]:checked')?.value || 'whatsapp';
+  const type = document.getElementById('ctType').value;
+
+  if (!name || !phone || !msg) {
+    showToast(hi ? 'कृपया नाम, फ़ोन और संदेश भरें।' : 'Please fill Name, Phone & Message.', true);
+    return;
+  }
+  if (!/^[+\d\s\-()]{7,15}$/.test(phone)) {
+    showToast(hi ? 'कृपया वैध फ़ोन नंबर दर्ज करें।' : 'Please enter a valid phone number.', true);
+    return;
+  }
+
+  // Simulate API call — would POST to AWS API Gateway
+  const ok = document.getElementById('ctSuccess');
+  const prefLabel = { whatsapp: 'WhatsApp', call: hi?'फ़ोन कॉल':'Phone Call', email: 'Email' }[pref];
+  ok.textContent = hi
+    ? `✅ संदेश भेजा गया! हम जल्द ही ${prefLabel} पर संपर्क करेंगे, ${name} जी।`
+    : `✅ Message sent! We'll reach you on ${prefLabel} shortly, ${name}.`;
+  ok.classList.remove('hidden');
+
+  // Clear form
+  ['ctName','ctPhone','ctEmail','ctMsg'].forEach(id => document.getElementById(id).value = '');
+  setTimeout(() => ok.classList.add('hidden'), 6000);
+
+  // If WhatsApp preferred, open WhatsApp with pre-filled message
+  if (pref === 'whatsapp') {
+    const waMsg = encodeURIComponent(`Hello Shukla Bakery!\n\nName: ${name}\nPhone: ${phone}\nInquiry: ${type}\n\n${msg}`);
+    setTimeout(() => window.open(`https://wa.me/919876543210?text=${waMsg}`, '_blank'), 800);
+  }
+
+  showToast(hi ? `संदेश भेजा गया! 📨 धन्यवाद ${name} जी।` : `Message sent! 📨 Thank you, ${name}.`);
+}
+function showToast(msg, err=false) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.style.background = err ? 'linear-gradient(135deg,#ef4444,#dc2626)' : 'linear-gradient(135deg,var(--acc),var(--acch))';
+  t.classList.remove('hidden');
+  clearTimeout(t._t);
+  t._t = setTimeout(()=>t.classList.add('hidden'), 3200);
+}
+</script>
+</body>
+</html>

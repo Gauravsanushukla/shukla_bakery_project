@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Shukla Bakery Store</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&family=Noto+Sans+Devanagari:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body class="light-mode font-inter transition-colors duration-300">
+
+  <!-- ===== SIGN-IN MODAL ===== -->
+  <div id="authModal" class="modal-overlay hidden fixed inset-0 z-50 flex items-center justify-center p-4">
+    <div class="modal-card rounded-2xl shadow-2xl w-full max-w-md p-8 relative">
+      <button onclick="closeModal()" class="absolute top-4 right-4 text-2xl opacity-60 hover:opacity-100 transition-opacity">&#x2715;</button>
+      <div class="text-center mb-6">
+        <div class="text-4xl mb-2">&#x1F950;</div>
+        <h2 class="text-2xl font-playfair font-bold" id="modalTitle">Sign In</h2>
+        <p class="text-sm opacity-60 mt-1" id="modalSubtitle">Welcome back to Shukla Bakery</p>
+      </div>
+      <div class="space-y-4">
+        <div>
+          <label class="block text-sm font-medium mb-1 opacity-70" id="labelEmail">Email Address</label>
+          <input id="authEmail" type="email" placeholder="you@example.com"
+            class="auth-input w-full px-4 py-3 rounded-xl border text-sm focus:outline-none focus:ring-2 transition" />
+        </div>
+        <div>
+          <label class="block text-sm font-medium mb-1 opacity-70" id="labelPassword">Password</label>
+          <input id="authPassword" type="password" placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;"
+            class="auth-input w-full px-4 py-3 rounded-xl border text-sm focus:outline-none focus:ring-2 transition" />
+        </div>
+        <div id="roleSelectWrap" class="hidden">
+          <label class="block text-sm font-medium mb-1 opacity-70">Role</label>
+          <select id="authRole" class="auth-input w-full px-4 py-3 rounded-xl border text-sm focus:outline-none focus:ring-2 transition">
+            <option value="client">Client</option>
+            <option value="admin">Admin</option>
+          </select>
+        </div>
+        <button onclick="handleAuth()" class="btn-primary w-full py-3 rounded-xl font-semibold text-white transition-all duration-200 hover:scale-[1.02]" id="authSubmitBtn">
+          Sign In
+        </button>
+        <p class="text-center text-sm opacity-60">
+          <span id="authToggleText">Don't have an account?</span>
+          <button onclick="toggleAuthMode()" class="ml-1 font-semibold underline" id="authToggleBtn">Register</button>
+        </p>
+      </div>
+      <div id="authError" class="hidden mt-3 text-red-500 text-sm text-center"></div>
+    </div>
+  </div>
+
+  <!-- ===== HEADER / NAV ===== -->
+  <header id="mainHeader" class="header-bg sticky top-0 z-40 shadow-sm transition-all duration-300">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16">
+        <div class="flex items-center gap-3">
+          <span class="text-3xl">&#x1F9C1;</span>
+          <div>
+            <h1 class="font-playfair font-bold text-xl leading-tight logo-text" id="brandName">Shukla Bakery</h1>
+            <p class="text-xs opacity-50 leading-none" id="brandTagline">Baked with Love</p>
+          </div>
+        </div>
+        <!-- Nav Links -->
+        <nav class="hidden md:flex items-center gap-6 text-sm font-medium">
+          <a href="#offers" class="nav-link" data-en="Offers" data-hi="ऑफर">Offers</a>
+          <a href="#inventory" class="nav-link" data-en="Shop" data-hi="दुकान">Shop</a>
+          <a href="#gallery" class="nav-link" data-en="Gallery" data-hi="गैलरी">Gallery</a>
+          <a href="#reviews" class="nav-link" data-en="Reviews" data-hi="समीक्षाएं">Reviews</a>
+        </nav>
+        <!-- Controls -->
+        <div class="flex items-center gap-3">
+          <!-- Language Toggle -->
+          <button onclick="toggleLanguage()" id="langBtn"
+            class="lang-btn px-3 py-1.5 rounded-lg text-xs font-semibold border transition-all duration-200 hover:scale-105">
+            हिंदी
+          </button>
+          <!-- Dark Mode Toggle -->
+          <button onclick="toggleDarkMode()" id="darkBtn"
+            class="theme-btn w-9 h-9 rounded-full flex items-center justify-center border transition-all duration-200 hover:scale-110 text-lg">
+            &#x1F319;
+          </button>
+          <!-- Auth Button -->
+          <div id="authArea">
+            <button onclick="openModal()" id="signInBtn"
+              class="btn-primary px-4 py-2 rounded-xl text-sm font-semibold text-white transition-all duration-200 hover:scale-105">
+              <span data-en="Sign In" data-hi="साइन इन">Sign In</span>
+            </button>
+          </div>
+          <!-- Mobile Menu -->
+          <button onclick="toggleMobileMenu()" class="md:hidden theme-btn w-9 h-9 rounded-full flex items-center justify-center border text-lg">
+            &#9776;
+          </button>
+        </div>
+      </div>
+      <!-- Mobile Nav -->
+      <div id="mobileMenu" class="hidden md:hidden pb-4 space-y-2 text-sm font-medium">
+        <a href="#offers" onclick="toggleMobileMenu()" class="block nav-link py-2" data-en="Offers" data-hi="ऑफर">Offers</a>
+        <a href="#inventory" onclick="toggleMobileMenu()" class="block nav-link py-2" data-en="Shop" data-hi="दुकान">Shop</a>
+        <a href="#gallery" onclick="toggleMobileMenu()" class="block nav-link py-2" data-en="Gallery" data-hi="गैलरी">Gallery</a>
+        <a href="#reviews" onclick="toggleMobileMenu()" class="block nav-link py-2" data-en="Reviews" data-hi="समीक्षाएं">Reviews</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- ===== HERO ===== -->
+  <section class="hero-section py-20 px-4 text-center relative overflow-hidden">
+    <div class="hero-bg-decor"></div>
+    <div class="max-w-3xl mx-auto relative z-10">
+      <p class="text-sm font-semibold tracking-widest uppercase accent-text mb-3" data-en="Est. 1998 · Kanpur, UP" data-hi="स्थापित 1998 · कानपुर, उ.प्र.">Est. 1998 · Kanpur, UP</p>
+      <h2 class="font-playfair text-5xl md:text-6xl font-bold hero-title mb-4 leading-tight" id="heroTitle">
+        Freshly Baked,<br/>Every Single Day
+      </h2>
+      <p class="hero-subtitle text-lg opacity-70 mb-8 max-w-xl mx-auto" id="heroSubtitle">
+        Artisan breads, celebration cakes, and handcrafted pastries — made with the finest ingredients and generations of love.
+      </p>
+      <div class="flex flex-wrap gap-4 justify-center">
+        <a href="#inventory" class="btn-primary px-8 py-3 rounded-xl font-semibold text-white text-base transition-all duration-200 hover:scale-105 shadow-lg" data-en="Shop Now" data-hi="अभी खरीदें">Shop Now</a>
+        <a href="#offers" class="btn-secondary px-8 py-3 rounded-xl font-semibold text-base transition-all duration-200 hover:scale-105" data-en="Today's Deals" data-hi="आज के ऑफर">Today's Deals</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== SPECIAL OFFERS CAROUSEL ===== -->
+  <section id="offers" class="py-16 px-4">
+    <div class="max-w-7xl mx-auto">
+      <div class="text-center mb-10">
+        <p class="accent-text text-sm font-semibold tracking-widest uppercase mb-2" data-en="Limited Time" data-hi="सीमित समय">Limited Time</p>
+        <h2 class="font-playfair text-4xl font-bold section-title" data-en="Special Offers" data-hi="विशेष ऑफर">Special Offers</h2>
+      </div>
+      <div class="relative">
+        <div id="carouselTrack" class="flex gap-6 overflow-hidden">
+          <!-- Cards injected by JS -->
+        </div>
+        <button onclick="prevSlide()" class="carousel-btn absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 w-10 h-10 rounded-full shadow-lg flex items-center justify-center text-lg z-10 transition hover:scale-110">&#8249;</button>
+        <button onclick="nextSlide()" class="carousel-btn absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 w-10 h-10 rounded-full shadow-lg flex items-center justify-center text-lg z-10 transition hover:scale-110">&#8250;</button>
+      </div>
+      <div id="carouselDots" class="flex justify-center gap-2 mt-6"></div>
+    </div>
+  </section>
+
+  <!-- ===== INVENTORY ===== -->
+  <section id="inventory" class="py-16 px-4 inventory-section">
+    <div class="max-w-7xl mx-auto">
+      <div class="text-center mb-10">
+        <p class="accent-text text-sm font-semibold tracking-widest uppercase mb-2" data-en="Fresh Daily" data-hi="रोज़ ताज़ा">Fresh Daily</p>
+        <h2 class="font-playfair text-4xl font-bold section-title" data-en="Our Products" data-hi="हमारे उत्पाद">Our Products</h2>
+      </div>
+
+      <!-- Admin Add Item Form -->
+      <div id="adminAddForm" class="hidden mb-8 admin-panel rounded-2xl p-6 border-2 border-dashed">
+        <h3 class="font-playfair text-xl font-bold mb-4 flex items-center gap-2">
+          <span>&#x2795;</span>
+          <span data-en="Add New Product" data-hi="नया उत्पाद जोड़ें">Add New Product</span>
+        </h3>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <input id="newName" type="text" placeholder="Product Name" class="auth-input px-4 py-2.5 rounded-xl border text-sm focus:outline-none focus:ring-2" />
+          <input id="newPrice" type="number" placeholder="Price (₹)" class="auth-input px-4 py-2.5 rounded-xl border text-sm focus:outline-none focus:ring-2" />
+          <select id="newCategory" class="auth-input px-4 py-2.5 rounded-xl border text-sm focus:outline-none focus:ring-2">
+            <option value="cakes">Cakes</option>
+            <option value="pastries">Pastries</option>
+            <option value="breads">Breads</option>
+            <option value="cookies">Cookies</option>
+          </select>
+          <input id="newEmoji" type="text" placeholder="Emoji (e.g. 🎂)" class="auth-input px-4 py-2.5 rounded-xl border text-sm focus:outline-none focus:ring-2" />
+          <input id="newDesc" type="text" placeholder="Short description" class="auth-input px-4 py-2.5 rounded-xl border text-sm focus:outline-none focus:ring-2 sm:col-span-2" />
+        </div>
+        <button onclick="addProduct()" class="btn-primary mt-4 px-6 py-2.5 rounded-xl font-semibold text-white text-sm transition hover:scale-105">
+          Add Product
+        </button>
+      </div>
+
+      <!-- Filter Bar -->
+      <div class="flex flex-wrap gap-3 mb-8 justify-center" id="filterBar">
+        <button onclick="filterProducts('all')" class="filter-btn active px-5 py-2 rounded-full text-sm font-semibold transition-all duration-200" data-en="All" data-hi="सभी">All</button>
+        <button onclick="filterProducts('cakes')" class="filter-btn px-5 py-2 rounded-full text-sm font-semibold transition-all duration-200" data-en="Cakes" data-hi="केक">Cakes</button>
+        <button onclick="filterProducts('pastries')" class="filter-btn px-5 py-2 rounded-full text-sm font-semibold transition-all duration-200" data-en="Pastries" data-hi="पेस्ट्री">Pastries</button>
+        <button onclick="filterProducts('breads')" class="filter-btn px-5 py-2 rounded-full text-sm font-semibold transition-all duration-200" data-en="Breads" data-hi="ब्रेड">Breads</button>
+        <button onclick="filterProducts('cookies')" class="filter-btn px-5 py-2 rounded-full text-sm font-semibold transition-all duration-200" data-en="Cookies" data-hi="कुकीज़">Cookies</button>
+      </div>
+
+      <!-- Product Grid -->
+      <div id="productGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        <!-- Injected by JS -->
+      </div>
+      <p id="emptyState" class="hidden text-center opacity-50 py-12 text-lg">No products found in this category.</p>
+    </div>
+  </section>
+
+  <!-- ===== GALLERY ===== -->
+  <section id="gallery" class="py-16 px-4">
+    <div class="max-w-7xl mx-auto">
+      <div class="text-center mb-10">
+        <p class="accent-text text-sm font-semibold tracking-widest uppercase mb-2" data-en="Our Creations" data-hi="हमारी कृतियां">Our Creations</p>
+        <h2 class="font-playfair text-4xl font-bold section-title" data-en="Media Gallery" data-hi="मीडिया गैलरी">Media Gallery</h2>
+      </div>
+      <div id="galleryGrid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+        <!-- Injected by JS -->
+      </div>
+    </div>
+  </section>
+
+  <!-- Lightbox -->
+  <div id="lightbox" class="hidden fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4" onclick="closeLightbox()">
+    <div class="relative max-w-2xl w-full">
+      <button class="absolute -top-10 right-0 text-white text-3xl opacity-80 hover:opacity-100">&#x2715;</button>
+      <div id="lightboxContent" class="rounded-2xl overflow-hidden text-center text-8xl py-20 bg-white/10 backdrop-blur"></div>
+      <p id="lightboxCaption" class="text-white text-center mt-4 text-sm opacity-80"></p>
+    </div>
+  </div>
+
+  <!-- ===== REVIEWS ===== -->
+  <section id="reviews" class="py-16 px-4 reviews-section">
+    <div class="max-w-7xl mx-auto">
+      <div class="text-center mb-10">
+        <p class="accent-text text-sm font-semibold tracking-widest uppercase mb-2" data-en="What People Say" data-hi="लोग क्या कहते हैं">What People Say</p>
+        <h2 class="font-playfair text-4xl font-bold section-title" data-en="Reviews & Ratings" data-hi="समीक्षाएं और रेटिंग">Reviews &amp; Ratings</h2>
+      </div>
+
+      <!-- Review Form -->
+      <div class="review-form-card rounded-2xl p-8 max-w-2xl mx-auto mb-12 shadow-lg">
+        <h3 class="font-playfair text-xl font-bold mb-5" data-en="Share Your Experience" data-hi="अपना अनुभव साझा करें">Share Your Experience</h3>
+        <div class="space-y-4">
+          <input id="reviewName" type="text" placeholder="Your Name"
+            class="auth-input w-full px-4 py-3 rounded-xl border text-sm focus:outline-none focus:ring-2 transition" />
+          <div>
+            <p class="text-sm font-medium mb-2 opacity-70" data-en="Your Rating" data-hi="आपकी रेटिंग">Your Rating</p>
+            <div id="starSelector" class="flex gap-2 text-3xl cursor-pointer">
+              <span class="star" data-val="1" onclick="setRating(1)">&#9733;</span>
+              <span class="star" data-val="2" onclick="setRating(2)">&#9733;</span>
+              <span class="star" data-val="3" onclick="setRating(3)">&#9733;</span>
+              <span class="star" data-val="4" onclick="setRating(4)">&#9733;</span>
+              <span class="star" data-val="5" onclick="setRating(5)">&#9733;</span>
+            </div>
+          </div>
+          <textarea id="reviewContent" rows="4" placeholder="Tell us about your experience..."
+            class="auth-input w-full px-4 py-3 rounded-xl border text-sm focus:outline-none focus:ring-2 transition resize-none"></textarea>
+          <button onclick="submitReview()" class="btn-primary w-full py-3 rounded-xl font-semibold text-white transition-all duration-200 hover:scale-[1.02]" data-en="Submit Review" data-hi="समीक्षा सबमिट करें">
+            Submit Review
+          </button>
+        </div>
+        <div id="reviewSuccess" class="hidden mt-3 text-green-500 text-sm text-center font-medium"></div>
+      </div>
+
+      <!-- Rating Summary -->
+      <div id="ratingSummary" class="max-w-2xl mx-auto mb-10 review-form-card rounded-2xl p-6 shadow-lg">
+        <div class="flex items-center gap-6">
+          <div class="text-center">
+            <div id="avgRatingDisplay" class="font-playfair text-5xl font-bold accent-text">5.0</div>
+            <div id="avgStarsDisplay" class="text-yellow-400 text-xl mt-1">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+            <div id="totalReviewsDisplay" class="text-xs opacity-50 mt-1">1 review</div>
+          </div>
+          <div class="flex-1 space-y-1.5" id="ratingBars"></div>
+        </div>
+      </div>
+
+      <!-- Testimonial Feed -->
+      <div id="reviewFeed" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- Injected by JS -->
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="footer-bg py-12 px-4 mt-8">
+    <div class="max-w-7xl mx-auto">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+        <div>
+          <div class="flex items-center gap-2 mb-3">
+            <span class="text-2xl">&#x1F9C1;</span>
+            <span class="font-playfair font-bold text-lg logo-text">Shukla Bakery</span>
+          </div>
+          <p class="text-sm opacity-60 leading-relaxed" data-en="Serving freshness since 1998. Every bite tells a story of tradition and passion." data-hi="1998 से ताज़गी परोस रहे हैं। हर निवाला परंपरा और जुनून की कहानी कहता है।">
+            Serving freshness since 1998. Every bite tells a story of tradition and passion.
+          </p>
+        </div>
+        <div>
+          <h4 class="font-semibold mb-3 opacity-80" data-en="Quick Links" data-hi="त्वरित लिंक">Quick Links</h4>
+          <ul class="space-y-2 text-sm opacity-60">
+            <li><a href="#offers" class="hover:opacity-100 transition" data-en="Special Offers" data-hi="विशेष ऑफर">Special Offers</a></li>
+            <li><a href="#inventory" class="hover:opacity-100 transition" data-en="Our Products" data-hi="हमारे उत्पाद">Our Products</a></li>
+            <li><a href="#gallery" class="hover:opacity-100 transition" data-en="Gallery" data-hi="गैलरी">Gallery</a></li>
+            <li><a href="#reviews" class="hover:opacity-100 transition" data-en="Reviews" data-hi="समीक्षाएं">Reviews</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="font-semibold mb-3 opacity-80" data-en="Contact Us" data-hi="संपर्क करें">Contact Us</h4>
+          <ul class="space-y-2 text-sm opacity-60">
+            <li>&#x1F4CD; 12, Civil Lines, Kanpur, UP</li>
+            <li>&#x1F4DE; +91 98765 43210</li>
+            <li>&#x2709;&#xFE0F; hello@shukla-bakery.in</li>
+            <li>&#x23F0; Mon–Sun: 7 AM – 9 PM</li>
+          </ul>
+        </div>
+      </div>
+      <div class="border-t border-current opacity-10 pt-6 text-center text-xs opacity-50">
+        <p>&copy; 2024 Shukla Bakery Store. All rights reserved. | Crafted with &#x2764;&#xFE0F; in Kanpur</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Toast Notification -->
+  <div id="toast" class="hidden fixed bottom-6 right-6 z-50 px-5 py-3 rounded-xl shadow-xl text-white text-sm font-medium transition-all duration-300"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>
