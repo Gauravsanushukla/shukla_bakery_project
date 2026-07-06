@@ -12,6 +12,17 @@
 </head>
 <body class="light-mode font-inter transition-colors duration-300">
 
+  <!-- ===== SPLASH SCREEN ===== -->
+  <div id="splashScreen" class="fixed inset-0 z-[100] flex flex-col items-center justify-center splash-bg" style="overflow:hidden">
+    <div class="splash-logo-wrap">
+      <img src="logo.png" alt="Shukla Bekari Shop Logo" class="splash-logo" id="splashLogo" />
+    </div>
+    <p class="splash-tagline" id="splashTagline">Fresh Baked, Pure Happiness</p>
+    <div class="splash-loader">
+      <div class="splash-loader-bar"></div>
+    </div>
+  </div>
+
   <!-- ===== SIGN-IN MODAL ===== -->
   <div id="authModal" class="modal-overlay hidden fixed inset-0 z-50 flex items-center justify-center p-4">
     <div class="modal-card rounded-2xl shadow-2xl w-full max-w-md p-8 relative">
@@ -56,7 +67,7 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex items-center justify-between h-16">
         <div class="flex items-center gap-3">
-          <span class="text-3xl">&#x1F9C1;</span>
+          <img src="logo.png" alt="Shukla Bekari" class="header-logo" />
           <div>
             <h1 class="font-playfair font-bold text-xl leading-tight logo-text" id="brandName">Shukla Bakery</h1>
             <p class="text-xs opacity-50 leading-none" id="brandTagline">Baked with Love</p>
@@ -64,10 +75,10 @@
         </div>
         <!-- Nav Links -->
         <nav class="hidden md:flex items-center gap-6 text-sm font-medium">
-          <a href="#offers" class="nav-link" data-en="Offers" data-hi="ऑफर">Offers</a>
           <a href="#inventory" class="nav-link" data-en="Shop" data-hi="दुकान">Shop</a>
           <a href="#gallery" class="nav-link" data-en="Gallery" data-hi="गैलरी">Gallery</a>
           <a href="#reviews" class="nav-link" data-en="Reviews" data-hi="समीक्षाएं">Reviews</a>
+          <a href="#address" class="nav-link" data-en="Visit Us" data-hi="हमारे पास आएं">Visit Us</a>
         </nav>
         <!-- Controls -->
         <div class="flex items-center gap-3">
@@ -96,10 +107,10 @@
       </div>
       <!-- Mobile Nav -->
       <div id="mobileMenu" class="hidden md:hidden pb-4 space-y-2 text-sm font-medium">
-        <a href="#offers" onclick="toggleMobileMenu()" class="block nav-link py-2" data-en="Offers" data-hi="ऑफर">Offers</a>
         <a href="#inventory" onclick="toggleMobileMenu()" class="block nav-link py-2" data-en="Shop" data-hi="दुकान">Shop</a>
         <a href="#gallery" onclick="toggleMobileMenu()" class="block nav-link py-2" data-en="Gallery" data-hi="गैलरी">Gallery</a>
         <a href="#reviews" onclick="toggleMobileMenu()" class="block nav-link py-2" data-en="Reviews" data-hi="समीक्षाएं">Reviews</a>
+        <a href="#address" onclick="toggleMobileMenu()" class="block nav-link py-2" data-en="Visit Us" data-hi="हमारे पास आएं">Visit Us</a>
       </div>
     </div>
   </header>
@@ -117,26 +128,8 @@
       </p>
       <div class="flex flex-wrap gap-4 justify-center">
         <a href="#inventory" class="btn-primary px-8 py-3 rounded-xl font-semibold text-white text-base transition-all duration-200 hover:scale-105 shadow-lg" data-en="Shop Now" data-hi="अभी खरीदें">Shop Now</a>
-        <a href="#offers" class="btn-secondary px-8 py-3 rounded-xl font-semibold text-base transition-all duration-200 hover:scale-105" data-en="Today's Deals" data-hi="आज के ऑफर">Today's Deals</a>
+        <a href="#gallery" class="btn-secondary px-8 py-3 rounded-xl font-semibold text-base transition-all duration-200 hover:scale-105" data-en="View Gallery" data-hi="गैलरी देखें">View Gallery</a>
       </div>
-    </div>
-  </section>
-
-  <!-- ===== SPECIAL OFFERS CAROUSEL ===== -->
-  <section id="offers" class="py-16 px-4">
-    <div class="max-w-7xl mx-auto">
-      <div class="text-center mb-10">
-        <p class="accent-text text-sm font-semibold tracking-widest uppercase mb-2" data-en="Limited Time" data-hi="सीमित समय">Limited Time</p>
-        <h2 class="font-playfair text-4xl font-bold section-title" data-en="Special Offers" data-hi="विशेष ऑफर">Special Offers</h2>
-      </div>
-      <div class="relative">
-        <div id="carouselTrack" class="flex gap-6 overflow-hidden">
-          <!-- Cards injected by JS -->
-        </div>
-        <button onclick="prevSlide()" class="carousel-btn absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 w-10 h-10 rounded-full shadow-lg flex items-center justify-center text-lg z-10 transition hover:scale-110">&#8249;</button>
-        <button onclick="nextSlide()" class="carousel-btn absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 w-10 h-10 rounded-full shadow-lg flex items-center justify-center text-lg z-10 transition hover:scale-110">&#8250;</button>
-      </div>
-      <div id="carouselDots" class="flex justify-center gap-2 mt-6"></div>
     </div>
   </section>
 
@@ -195,7 +188,7 @@
         <p class="accent-text text-sm font-semibold tracking-widest uppercase mb-2" data-en="Our Creations" data-hi="हमारी कृतियां">Our Creations</p>
         <h2 class="font-playfair text-4xl font-bold section-title" data-en="Media Gallery" data-hi="मीडिया गैलरी">Media Gallery</h2>
       </div>
-      <div id="galleryGrid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+      <div id="galleryGrid" class="gallery-bento">
         <!-- Injected by JS -->
       </div>
     </div>
@@ -262,6 +255,92 @@
     </div>
   </section>
 
+  <!-- ===== ADDRESS & LOCATION ===== -->
+  <section id="address" class="py-16 px-4 address-section">
+    <div class="max-w-7xl mx-auto">
+      <div class="text-center mb-10">
+        <p class="accent-text text-sm font-semibold tracking-widest uppercase mb-2" data-en="Find Us" data-hi="हमें खोजें">Find Us</p>
+        <h2 class="font-playfair text-4xl font-bold section-title" data-en="Visit Our Bakery" data-hi="हमारी बेकरी आएं">Visit Our Bakery</h2>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
+
+        <!-- Info Cards -->
+        <div class="space-y-4">
+          <!-- Address Card -->
+          <div class="address-card rounded-2xl p-6 flex items-start gap-4">
+            <div class="address-icon-wrap">
+              <span class="text-2xl">📍</span>
+            </div>
+            <div>
+              <h3 class="font-playfair font-bold text-lg mb-1" data-en="Our Location" data-hi="हमारा पता">Our Location</h3>
+              <p class="text-sm leading-relaxed" style="color:var(--text-secondary)">12, Civil Lines,<br/>Near Phool Bagh,<br/>Kanpur, Uttar Pradesh — 208 001</p>
+              <a href="https://www.google.com/maps/search/Civil+Lines+Kanpur" target="_blank" rel="noopener"
+                class="inline-flex items-center gap-1.5 mt-3 text-xs font-semibold px-4 py-2 rounded-lg btn-primary text-white transition hover:scale-105">
+                <span>🗺️</span>
+                <span data-en="Open in Google Maps" data-hi="गूगल मैप्स में खोलें">Open in Google Maps</span>
+              </a>
+            </div>
+          </div>
+
+          <!-- Hours Card -->
+          <div class="address-card rounded-2xl p-6 flex items-start gap-4">
+            <div class="address-icon-wrap">
+              <span class="text-2xl">🕐</span>
+            </div>
+            <div class="w-full">
+              <h3 class="font-playfair font-bold text-lg mb-3" data-en="Opening Hours" data-hi="खुलने का समय">Opening Hours</h3>
+              <div class="space-y-2 text-sm">
+                <div class="flex justify-between items-center py-1.5 border-b" style="border-color:var(--border)">
+                  <span style="color:var(--text-secondary)" data-en="Monday – Friday" data-hi="सोमवार – शुक्रवार">Monday – Friday</span>
+                  <span class="font-semibold accent-text">7:00 AM – 9:00 PM</span>
+                </div>
+                <div class="flex justify-between items-center py-1.5 border-b" style="border-color:var(--border)">
+                  <span style="color:var(--text-secondary)" data-en="Saturday" data-hi="शनिवार">Saturday</span>
+                  <span class="font-semibold accent-text">7:00 AM – 10:00 PM</span>
+                </div>
+                <div class="flex justify-between items-center py-1.5">
+                  <span style="color:var(--text-secondary)" data-en="Sunday" data-hi="रविवार">Sunday</span>
+                  <span class="font-semibold accent-text">8:00 AM – 8:00 PM</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Contact Card -->
+          <div class="address-card rounded-2xl p-6 flex items-start gap-4">
+            <div class="address-icon-wrap">
+              <span class="text-2xl">📞</span>
+            </div>
+            <div>
+              <h3 class="font-playfair font-bold text-lg mb-2" data-en="Get in Touch" data-hi="संपर्क करें">Get in Touch</h3>
+              <div class="space-y-2 text-sm" style="color:var(--text-secondary)">
+                <p>📱 <a href="tel:+919876543210" class="hover:text-[var(--accent)] transition font-medium">+91 98765 43210</a></p>
+                <p>✉️ <a href="mailto:hello@shukla-bakery.in" class="hover:text-[var(--accent)] transition font-medium">hello@shukla-bakery.in</a></p>
+                <p>💬 <span data-en="WhatsApp orders welcome!" data-hi="व्हाट्सएप ऑर्डर स्वागत है!">WhatsApp orders welcome!</span></p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Map Embed -->
+        <div class="address-card rounded-2xl overflow-hidden map-container">
+          <iframe
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3571.2!2d80.3318!3d26.4499!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x399c4770b127c46f%3A0x1778302a9fbe7b41!2sCivil%20Lines%2C%20Kanpur%2C%20Uttar%20Pradesh!5e0!3m2!1sen!2sin!4v1700000000000!5m2!1sen!2sin"
+            width="100%" height="100%" style="border:0;min-height:420px;" allowfullscreen="" loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade" title="Shukla Bekari Shop Location">
+          </iframe>
+          <div class="map-overlay-btn">
+            <a href="https://www.google.com/maps/dir/?api=1&destination=Civil+Lines+Kanpur+UP" target="_blank" rel="noopener"
+              class="btn-primary inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold text-white transition hover:scale-105 shadow-lg">
+              🧭 <span data-en="Get Directions" data-hi="रास्ता पाएं">Get Directions</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- ===== FOOTER ===== -->
   <footer class="footer-bg py-12 px-4 mt-8">
     <div class="max-w-7xl mx-auto">
@@ -278,10 +357,10 @@
         <div>
           <h4 class="font-semibold mb-3 opacity-80" data-en="Quick Links" data-hi="त्वरित लिंक">Quick Links</h4>
           <ul class="space-y-2 text-sm opacity-60">
-            <li><a href="#offers" class="hover:opacity-100 transition" data-en="Special Offers" data-hi="विशेष ऑफर">Special Offers</a></li>
             <li><a href="#inventory" class="hover:opacity-100 transition" data-en="Our Products" data-hi="हमारे उत्पाद">Our Products</a></li>
             <li><a href="#gallery" class="hover:opacity-100 transition" data-en="Gallery" data-hi="गैलरी">Gallery</a></li>
             <li><a href="#reviews" class="hover:opacity-100 transition" data-en="Reviews" data-hi="समीक्षाएं">Reviews</a></li>
+            <li><a href="#address" class="hover:opacity-100 transition" data-en="Visit Us" data-hi="हमारे पास आएं">Visit Us</a></li>
           </ul>
         </div>
         <div>

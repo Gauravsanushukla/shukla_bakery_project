@@ -9,14 +9,12 @@
 const state = {
   lang: 'en',
   darkMode: false,
-  authMode: 'signin',   // 'signin' | 'register'
-  currentUser: null,    // { email, role }
+  authMode: 'signin',
+  currentUser: null,
   currentFilter: 'all',
-  carouselIndex: 0,
   selectedRating: 0,
   products: [],
   reviews: [],
-  offers: [],
   gallery: [],
 };
 
@@ -36,27 +34,13 @@ const SEED_PRODUCTS = [
   { id:12, name: 'Shortbread Fingers',   nameHi: 'शॉर्टब्रेड फिंगर्स',   category: 'cookies',  price: 90,   emoji: '🍘', desc: 'Melt-in-mouth Scottish butter shortbread',     descHi: 'मुंह में घुलने वाला बटर शॉर्टब्रेड' },
 ];
 
-const SEED_OFFERS = [
-  { id: 1, title: 'Morning Freshness',   titleHi: 'सुबह की ताज़गी',    discount: '20% OFF',  desc: 'All breads & pastries before 10 AM',       descHi: 'सुबह 10 बजे से पहले सभी ब्रेड और पेस्ट्री', emoji: '🌅', tag: 'Daily Deal',    tagHi: 'दैनिक ऑफर',   color: '#f59e0b' },
-  { id: 2, title: 'Birthday Bonanza',    titleHi: 'जन्मदिन बोनान्ज़ा', discount: '15% OFF',  desc: 'Custom cakes ordered 2 days in advance',   descHi: '2 दिन पहले ऑर्डर किए गए कस्टम केक',        emoji: '🎂', tag: 'Special',       tagHi: 'विशेष',        color: '#ec4899' },
-  { id: 3, title: 'Festive Combo',       titleHi: 'त्योहार कॉम्बो',    discount: '₹200 OFF', desc: 'Buy any 3 items, save ₹200 instantly',     descHi: 'कोई भी 3 आइटम खरीदें, ₹200 बचाएं',         emoji: '🎉', tag: 'Combo',         tagHi: 'कॉम्बो',       color: '#8b5cf6' },
-  { id: 4, title: 'Weekend Treat',       titleHi: 'वीकेंड ट्रीट',      discount: 'Buy 2 Get 1', desc: 'On all cookies & macarons this weekend', descHi: 'इस वीकेंड सभी कुकीज़ और मैकरॉन पर',        emoji: '🍪', tag: 'Weekend',       tagHi: 'वीकेंड',       color: '#10b981' },
-  { id: 5, title: 'Loyalty Reward',      titleHi: 'लॉयल्टी रिवॉर्ड',  discount: '10% OFF',  desc: 'For registered members on every order',    descHi: 'हर ऑर्डर पर पंजीकृत सदस्यों के लिए',       emoji: '⭐', tag: 'Members Only',  tagHi: 'सदस्यों के लिए', color: '#f97316' },
-];
-
 const SEED_GALLERY = [
-  { id: 1,  emoji: '🎂', caption: 'Custom Wedding Cake',       captionHi: 'कस्टम वेडिंग केक',       span: 'tall' },
-  { id: 2,  emoji: '🥐', caption: 'Morning Croissants',        captionHi: 'सुबह के क्रोइसां',        span: '' },
-  { id: 3,  emoji: '🍰', caption: 'Red Velvet Slice',          captionHi: 'रेड वेलवेट स्लाइस',       span: '' },
-  { id: 4,  emoji: '🍞', caption: 'Artisan Bread Basket',      captionHi: 'आर्टिसन ब्रेड बास्केट',   span: 'wide' },
-  { id: 5,  emoji: '🧁', caption: 'Cupcake Collection',        captionHi: 'कपकेक कलेक्शन',           span: '' },
-  { id: 6,  emoji: '🍩', caption: 'Glazed Donuts',             captionHi: 'ग्लेज़्ड डोनट्स',         span: '' },
-  { id: 7,  emoji: '🥧', caption: 'Fruit Tart Display',        captionHi: 'फ्रूट टार्ट डिस्प्ले',    span: 'tall' },
-  { id: 8,  emoji: '🫐', caption: 'Macaron Tower',             captionHi: 'मैकरॉन टॉवर',             span: '' },
-  { id: 9,  emoji: '🍫', caption: 'Chocolate Ganache Cake',    captionHi: 'चॉकलेट गनाश केक',         span: '' },
-  { id: 10, emoji: '🌸', caption: 'Floral Fondant Cake',       captionHi: 'फ्लोरल फोंडेंट केक',      span: '' },
-  { id: 11, emoji: '🥭', caption: 'Mango Season Special',      captionHi: 'आम सीज़न स्पेशल',         span: 'wide' },
-  { id: 12, emoji: '🎉', caption: 'Celebration Spread',        captionHi: 'उत्सव की थाली',           span: '' },
+  { id: 1,  emoji: '🎂', caption: 'Custom Wedding Cake',    captionHi: 'कस्टम वेडिंग केक',     size: 'hero'   },
+  { id: 2,  emoji: '🥐', caption: 'Morning Croissants',     captionHi: 'सुबह के क्रोइसां',      size: 'normal' },
+  { id: 3,  emoji: '🍰', caption: 'Red Velvet Slice',       captionHi: 'रेड वेलवेट स्लाइस',     size: 'normal' },
+  { id: 4,  emoji: '🍩', caption: 'Glazed Donuts',          captionHi: 'ग्लेज़्ड डोनट्स',       size: 'wide'   },
+  { id: 5,  emoji: '🧁', caption: 'Cupcake Collection',     captionHi: 'कपकेक कलेक्शन',         size: 'normal' },
+  { id: 6,  emoji: '🫐', caption: 'Macaron Tower',          captionHi: 'मैकरॉन टॉवर',           size: 'normal' },
 ];
 
 const SEED_REVIEWS = [
@@ -69,16 +53,39 @@ const SEED_REVIEWS = [
 document.addEventListener('DOMContentLoaded', () => {
   state.products = [...SEED_PRODUCTS];
   state.reviews  = [...SEED_REVIEWS];
-  state.offers   = [...SEED_OFFERS];
   state.gallery  = [...SEED_GALLERY];
 
-  renderOffers();
   renderProducts();
   renderGallery();
   renderReviews();
   updateRatingSummary();
-  startCarouselAuto();
   applyLanguage();
+
+  // Auth modal backdrop click
+  const modal = document.getElementById('authModal');
+  if (modal) {
+    modal.addEventListener('click', function(e) {
+      if (e.target === this) closeModal();
+    });
+  }
+
+  // Splash screen — hide after 2.8s regardless of logo load
+  const splash = document.getElementById('splashScreen');
+  const hideSplash = () => {
+    splash.classList.add('splash-hide');
+    setTimeout(() => {
+      splash.style.display = 'none';
+      document.body.style.overflow = '';
+    }, 650);
+  };
+  setTimeout(hideSplash, 2800);
+
+  // Fallback: if splash somehow sticks, force hide at 4s
+  setTimeout(() => {
+    if (splash && splash.style.display !== 'none') {
+      splash.style.display = 'none';
+    }
+  }, 4000);
 });
 
 // ─── DARK MODE ────────────────────────────────────────────────
@@ -94,7 +101,6 @@ function toggleLanguage() {
   state.lang = state.lang === 'en' ? 'hi' : 'en';
   document.getElementById('langBtn').textContent = state.lang === 'en' ? 'हिंदी' : 'English';
   applyLanguage();
-  renderOffers();
   renderProducts();
   renderGallery();
   renderReviews();
@@ -122,6 +128,10 @@ function applyLanguage() {
     ? 'आर्टिसन ब्रेड, उत्सव केक और हस्तनिर्मित पेस्ट्री — बेहतरीन सामग्री और पीढ़ियों के प्यार से बनाई गई।'
     : 'Artisan breads, celebration cakes, and handcrafted pastries — made with the finest ingredients and generations of love.';
 
+  // Splash tagline
+  const splashTag = document.getElementById('splashTagline');
+  if (splashTag) splashTag.textContent = hi ? 'ताज़ा बेक, शुद्ध खुशी' : 'Fresh Baked, Pure Happiness';
+
   // Modal
   document.getElementById('labelEmail').textContent    = hi ? 'ईमेल पता' : 'Email Address';
   document.getElementById('labelPassword').textContent = hi ? 'पासवर्ड' : 'Password';
@@ -148,9 +158,6 @@ function closeModal() {
   document.body.style.overflow = '';
   document.getElementById('authError').classList.add('hidden');
 }
-document.getElementById('authModal').addEventListener('click', function(e) {
-  if (e.target === this) closeModal();
-});
 
 function toggleAuthMode() {
   state.authMode = state.authMode === 'signin' ? 'register' : 'signin';
@@ -231,98 +238,6 @@ function signOut() {
   const hi = state.lang === 'hi';
   showToast(hi ? 'आप साइन आउट हो गए।' : 'You have been signed out.');
 }
-
-// ─── CAROUSEL ─────────────────────────────────────────────────
-let carouselTimer = null;
-const VISIBLE_SLIDES = () => window.innerWidth >= 1024 ? 3 : window.innerWidth >= 640 ? 2 : 1;
-
-function renderOffers() {
-  const hi    = state.lang === 'hi';
-  const track = document.getElementById('carouselTrack');
-  const dots  = document.getElementById('carouselDots');
-  track.innerHTML = '';
-  dots.innerHTML  = '';
-
-  state.offers.forEach((offer, i) => {
-    const card = document.createElement('div');
-    card.className = 'carousel-card p-6 flex flex-col gap-3';
-    card.style.minWidth = `calc(${100 / VISIBLE_SLIDES()}% - 1.5rem)`;
-    card.innerHTML = `
-      <div class="text-5xl mb-1">${offer.emoji}</div>
-      <div class="flex items-center gap-2 flex-wrap">
-        <span class="badge" style="background:${offer.color}22;color:${offer.color}">${hi ? offer.tagHi : offer.tag}</span>
-        <span class="font-bold text-lg" style="color:${offer.color}">${offer.discount}</span>
-      </div>
-      <h3 class="font-playfair text-xl font-bold">${hi ? offer.titleHi : offer.title}</h3>
-      <p class="text-sm opacity-60 leading-relaxed">${hi ? offer.descHi : offer.desc}</p>
-      <button class="btn-primary mt-auto px-5 py-2 rounded-xl text-sm font-semibold text-white transition hover:scale-105 self-start"
-        data-en="Claim Offer" data-hi="ऑफर लें" onclick="claimOffer(${offer.id})">
-        ${hi ? 'ऑफर लें' : 'Claim Offer'}
-      </button>`;
-    track.appendChild(card);
-
-    const dot = document.createElement('div');
-    dot.className = 'carousel-dot' + (i === state.carouselIndex ? ' active' : '');
-    dot.onclick = () => goToSlide(i);
-    dots.appendChild(dot);
-  });
-
-  updateCarouselPosition();
-}
-
-function updateCarouselPosition() {
-  const track = document.getElementById('carouselTrack');
-  const vis   = VISIBLE_SLIDES();
-  const max   = Math.max(0, state.offers.length - vis);
-  state.carouselIndex = Math.min(state.carouselIndex, max);
-  const pct = state.carouselIndex * (100 / vis);
-  track.style.transform = `translateX(-${pct}%)`;
-  track.style.transition = 'transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
-
-  document.querySelectorAll('.carousel-dot').forEach((d, i) => {
-    d.classList.toggle('active', i === state.carouselIndex);
-  });
-}
-
-function nextSlide() {
-  const vis = VISIBLE_SLIDES();
-  const max = Math.max(0, state.offers.length - vis);
-  state.carouselIndex = state.carouselIndex >= max ? 0 : state.carouselIndex + 1;
-  updateCarouselPosition();
-  resetCarouselAuto();
-}
-
-function prevSlide() {
-  const vis = VISIBLE_SLIDES();
-  const max = Math.max(0, state.offers.length - vis);
-  state.carouselIndex = state.carouselIndex <= 0 ? max : state.carouselIndex - 1;
-  updateCarouselPosition();
-  resetCarouselAuto();
-}
-
-function goToSlide(i) {
-  state.carouselIndex = i;
-  updateCarouselPosition();
-  resetCarouselAuto();
-}
-
-function startCarouselAuto() {
-  carouselTimer = setInterval(nextSlide, 4000);
-}
-
-function resetCarouselAuto() {
-  clearInterval(carouselTimer);
-  startCarouselAuto();
-}
-
-function claimOffer(id) {
-  const hi = state.lang === 'hi';
-  showToast(hi ? 'ऑफर क्लिप किया गया! 🎉' : 'Offer claimed! 🎉');
-}
-
-window.addEventListener('resize', () => {
-  renderOffers();
-});
 
 // ─── PRODUCTS ─────────────────────────────────────────────────
 function renderProducts() {
@@ -461,14 +376,17 @@ function renderGallery() {
   const grid = document.getElementById('galleryGrid');
   grid.innerHTML = '';
 
-  state.gallery.forEach(item => {
+  state.gallery.forEach((item) => {
     const div = document.createElement('div');
-    div.className = `gallery-item ${item.span === 'tall' ? 'tall' : ''} ${item.span === 'wide' ? 'wide' : ''}`;
+    div.className = `gallery-item gallery-${item.size}`;
     div.title = hi ? item.captionHi : item.caption;
     div.innerHTML = `
-      <div class="flex flex-col items-center justify-center h-full gap-2 p-4">
-        <span>${item.emoji}</span>
-        <span class="text-xs font-medium opacity-60 text-center leading-tight" style="font-size:0.65rem">${hi ? item.captionHi : item.caption}</span>
+      <div class="gallery-img-wrap">
+        <span class="gallery-emoji">${item.emoji}</span>
+        <span class="gallery-label">${hi ? item.captionHi : item.caption}</span>
+      </div>
+      <div class="gallery-overlay">
+        <span>${hi ? item.captionHi : item.caption}</span>
       </div>`;
     div.onclick = () => openLightbox(item, hi);
     grid.appendChild(div);
